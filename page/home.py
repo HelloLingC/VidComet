@@ -1,6 +1,7 @@
 import streamlit as st
 from helper import ytp
-import helper.ytp
+import tkinter as tk
+from tkinter import filedialog
 
 options_input_mode = ['本地文件', '远程文件流']
 options_download_res = ['最高画质', '1080p', '720p', '480p', '360p']
@@ -28,6 +29,15 @@ css = '''
 '''
 
 def main():
+    if 'vid_file' not in st.session_state:
+        st.session_state.vid_file = None
+    # Set up tkinter
+    root = tk.Tk()
+    root.withdraw()
+    
+    # Make folder picker dialog appear on top of other windows
+    root.wm_attributes('-topmost', 1)
+
     # cst.change(language='cn')
     # st.sidebar.header('Left')
     # st.image('icon.png')
@@ -36,19 +46,28 @@ def main():
     input_mode = st.selectbox('选择视频输入源：', options_input_mode)
     if input_mode == options_input_mode[0]:
         uploaded_file = st.file_uploader("选择视频", type=["mp4", "avi", "mov", "mkv"])
+        if st.button('选择本地视频'):
+            fname = str(filedialog.askopenfilename(master=root))
+            # st按钮点击后，会重新更新界面，导致fname值被flush
+            # 包括打开tk的文件选择窗口之后
+            if fname:
+                st.session_state.vid_file = fname
+                st.text_input('选择的文件：', fname)
     else:
         col1, col2 = st.columns(2)
         url_input = st.text_input('输入视频URL')
         res = col1.selectbox('视频分辨率', options_download_res)
         col2.text_input('Cookies')
-    if(st.button('开始')):
-        if input_mode == options_input_mode[0]:
-            if uploaded_file is None:
+    if(st.button('开始', icon='🚀')):
+        fname = st.session_state.vid_file
+        if uploaded_file is None and fname is None:
                 st.error("请上传视频文件！")
                 return
+        if input_mode == options_input_mode[0]:
             # start_via_file(uploaded_file)
             st.spinner('正在处理...')
-            st.switch_page('pages')
+            st.session_state.file_path = fname
+            st.switch_page('page/subtitle.py')
         else:
             st.spinner('正在下载...')
             start_via_url(url_input, res)
