@@ -1,4 +1,10 @@
 import yaml
+import os
+
+AUDIO_DIR = os.path.join(os.getcwd(), 'output', 'audio')
+RAW_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'raw.mp3')
+VOCAL_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'vocal.mp3')
+BACKGROUND_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'background.mp3')
 
 CONFIG_FILE_PATH = "config.yaml"
 

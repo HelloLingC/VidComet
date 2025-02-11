@@ -1,8 +1,17 @@
 import whisperx
 import torch
+import log_utils
 import config_utils as cfg
+import preprocess
+
 
 options_model = ["large-v2"]
+
+# Preprocess video and transcribe audio via WhisperX
+def transcribe(vid_file):
+    preprocess.convert_to_audio(vid_file)
+
+
 
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(device, model_arch, compute_type='float16'):

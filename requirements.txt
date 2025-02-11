@@ -13,13 +13,16 @@ certifi==2025.1.31
 cffi==1.17.1
 charset-normalizer==3.4.1
 click==8.1.8
+cloudpickle==3.1.1
 coloredlogs==15.0.1
 colorlog==6.9.0
 configparser==7.1.0
 contourpy==1.3.1
 ctranslate2==4.4.0
 cycler==0.12.1
+demucs==4.0.1
 docopt==0.6.2
+dora_search==0.1.12
 einops==0.8.1
 faster-whisper==1.1.0
 filelock==3.17.0
@@ -40,6 +43,7 @@ jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 julius==0.2.7
 kiwisolver==1.4.8
+lameenc==1.8.1
 lightning==2.5.0.post0
 lightning-utilities==0.12.0
 Mako==1.3.9
@@ -68,6 +72,7 @@ nvidia-nvjitlink-cu12==12.4.127
 nvidia-nvtx-cu12==12.4.127
 omegaconf==2.3.0
 onnxruntime==1.20.1
+openunmix==1.3.0
 optuna==4.2.0
 packaging==24.2
 pandas==2.2.3
@@ -93,6 +98,7 @@ PyYAML==6.0.2
 referencing==0.36.2
 regex==2024.11.6
 requests==2.32.3
+retrying==1.3.4
 rich==13.9.4
 rpds-py==0.22.3
 ruamel.yaml==0.18.10
@@ -112,6 +118,7 @@ speechbrain==1.0.2
 SQLAlchemy==2.0.38
 streamlit==1.42.0
 streamlit_change_language==0.0.2
+submitit==1.5.2
 sympy==1.13.1
 tabulate==0.9.0
 tenacity==9.0.0
@@ -127,6 +134,7 @@ torchmetrics==1.6.1
 tornado==6.4.2
 tqdm==4.67.1
 transformers==4.48.3
+treetable==0.2.5
 triton==3.2.0
 typer==0.15.1
 typing_extensions==4.12.2

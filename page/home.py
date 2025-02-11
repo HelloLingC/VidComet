@@ -29,8 +29,8 @@ css = '''
 '''
 
 def main():
-    if 'vid_file' not in st.session_state:
-        st.session_state.vid_file = None
+    # if 'vid_file' not in st.session_state:
+    #     st.session_state.vid_file = None
     # Set up tkinter
     root = tk.Tk()
     root.withdraw()
