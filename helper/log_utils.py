@@ -29,7 +29,7 @@ logger.setLevel(logging.INFO)
 # 创建自定义 Handler
 observable_handler = ObservableHandler()
 observable_handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(message)s')
 observable_handler.setFormatter(formatter)
 logger.addHandler(observable_handler)
 
@@ -40,4 +40,7 @@ def info(v):
     logger.info(v)
 
 def success(v):
+    logger.info(f':green[{v}]')
+
+def warn(v):
     logger.info(v)

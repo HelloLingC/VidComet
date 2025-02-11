@@ -67,7 +67,7 @@ def main():
             # start_via_file(uploaded_file)
             st.spinner('正在处理...')
             st.session_state.file_path = fname
-            st.switch_page('page/subtitle.py')
+            st.switch_page('page/preprocess.py')
         else:
             st.spinner('正在下载...')
             start_via_url(url_input, res)

@@ -16,7 +16,7 @@ def enhance_vocals(vocals_ratio=2.50):
     # if not load_key("demucs"):
     #     return RAW_AUDIO_FILE_PATH
     try:
-        log_utils.info(f"[cyan]🎙️ Enhancing vocals with volume ratio: {vocals_ratio}[/cyan]")
+        log_utils.info(f"[cyan]🎙️人声增强 with volume ratio: {vocals_ratio}[/cyan]")
         ffmpeg_cmd = (
             f'ffmpeg -y -i "{VOCAL_AUDIO_FILE_PATH}" '
             f'-filter:a "volume={vocals_ratio}" '
@@ -98,3 +98,6 @@ def split_audio(audio_file: str, frag_len:int=30*60, window: int=60) -> list[tup
     log_utils.info(f"Audio has been split into {len(segments)} segments")
     return segments
 
+if __name__ == "__main__":
+    # print(os.path.exists("~\\MyProjects\\VidComet\\output\\audio\\raw.mp3"))
+    print(split_audio("/home/lingc/MyProjects/VidComet/output/audio/raw.mp3"))

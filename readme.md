@@ -1,5 +1,8 @@
 # Subtitle Comet
 
+## 简介
+
+
 # 运行需求
 
 Python >= 3.10

@@ -17,6 +17,7 @@ def test():
 def main():
     global log_placeholder
     st.header('生成字幕')
+    st.subheader('预处理')
     
     if not 'vid_file' in st.session_state:
         st.warning('视频文件未导入')
@@ -28,10 +29,14 @@ def main():
     if(st.button('start')):
         whisper_local.transcribe(vid_file)
         if os.path.exists(VOCAL_AUDIO_FILE_PATH):
+            st.success('音频预处理成功！')
             st.text('人声部分：')
             st.audio(VOCAL_AUDIO_FILE_PATH)
         else:
             st.error('VOCAL FILE NOT EXISTED')
+    
+    st.subheader('转录')
+    st.warning('请先进行音频预处理')
 
 main()
 # test()

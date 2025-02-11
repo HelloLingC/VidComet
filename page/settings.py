@@ -4,6 +4,7 @@ from helper import env_check
 
 col1, col2 = st.columns(2)
 with col1.expander('LLM 设置', True):
+    st.text_input('API Url')
     st.text_input('API Key')
 
 with col1.expander('FFmpeg', True):

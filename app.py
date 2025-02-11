@@ -14,16 +14,16 @@ torch.classes.__path__ = [os.path.join(torch.__path__[0], torch.classes.__file__
 st.set_page_config(page_title='Subtitle Comet', page_icon='icon.png')
 
 def main():
-    sys.path.append(os.getcwd() + '/helper')
-    # print(sys.path)
-    print(os.path.abspath(__file__))
+    if(os.getcwd() +'/helper' not in sys.path):
+        sys.path.append(os.getcwd() +'/helper')
+    # print(os.path.abspath(__file__))
     # cst.change(language='cn')
     st.logo('icon.png')
     st.sidebar.header('导航栏')
     
     p1 = st.Page('page/home.py', title='开始')
     
-    p2 = st.Page('page/prepocess.py', title='预处理')
+    p2 = st.Page('page/preprocess.py', title='预处理')
     p3 = st.Page('page/transcribe.py', title='转录')
     settings = st.Page('page/settings.py', title='设置')
     pg = st.navigation([p1, p2, p3, settings])
