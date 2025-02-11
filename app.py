@@ -23,10 +23,10 @@ def main():
     
     p1 = st.Page('page/home.py', title='开始')
     
-    p2 = st.Page('page/subtitle.py', title='字幕翻译')
-    p3 = st.Page('page/subtitle.py', title='视频剪辑')
+    p2 = st.Page('page/prepocess.py', title='预处理')
+    p3 = st.Page('page/transcribe.py', title='转录')
     settings = st.Page('page/settings.py', title='设置')
-    pg = st.navigation([p1, p2, settings])
+    pg = st.navigation([p1, p2, p3, settings])
     pg.run()
 
 if __name__ == '__main__':

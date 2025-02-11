@@ -12,6 +12,10 @@ with col1.expander('FFmpeg', True):
     if ver != None:
         st.text('版本：' + str(ver))
 
+with col1.expander('Demucs 设置', True):
+    # Pre-trained model
+    st.selectbox('预训练模型', ['htdemucs', 'htdemucs-ft', 'htdemucs_6s', 'mdx_extra_q'])
+
 with col2.expander('WhisperX 设置', True):
     st.selectbox('模型', ['large-v2', 'small'])
     st.selectbox('计算设备', ['GPU', 'CPU'])

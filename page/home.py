@@ -45,7 +45,7 @@ def main():
     st.title('SubtitleComet')
     input_mode = st.selectbox('选择视频输入源：', options_input_mode)
     if input_mode == options_input_mode[0]:
-        uploaded_file = st.file_uploader("选择视频", type=["mp4", "avi", "mov", "mkv"])
+        uploaded_file = st.file_uploader("上传视频", type=["mp4", "avi", "mov", "mkv"])
         if st.button('选择本地视频'):
             fname = str(filedialog.askopenfilename(master=root))
             # st按钮点击后，会重新更新界面，导致fname值被flush

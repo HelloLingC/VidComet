@@ -33,6 +33,8 @@ formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(messag
 observable_handler.setFormatter(formatter)
 logger.addHandler(observable_handler)
 
+def debug(v):
+    print(v)
 
 def info(v):
     logger.info(v)
