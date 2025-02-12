@@ -5,8 +5,9 @@ import log_utils
 from config_utils import *
 import subprocess
 # import librosa
-import preprocess
+import helper.whisper_preprocess as whisper_preprocess
 import demucs_local
+import json
 
 options_model = ["large-v3"]
 
@@ -21,7 +22,7 @@ def transcribe(vid_file):
     # 3 音频压缩
     preprocess.compress_audio(enhanced)"""
     # 4 音频切分
-    segments = preprocess.split_audio(COMPRESSED_AUDIO_PATH)
+    segments = whisper_preprocess.split_audio(COMPRESSED_AUDIO_PATH)
     # whisper转录
     transcribe_segments(segments)
 
@@ -29,14 +30,17 @@ def transcribe(vid_file):
 def transcribe_segments(segments):
     result = []
     for start, end in segments:
-        log_utils.info(f"Transcribing segment from {start} to {end} seconds")
+        log_utils.info(f"正在转录片段 从 {start} 到 {end} seconds")
         res = transcribe_audio(start, end)
         result.append(res)
     handle_transcription(result)
 
 def handle_transcription(t: dict):
-    for segment in t['segments']:
-        print(segment['text'])
+    # with open(os.getcwd() + '\\transcript.txt', 'w') as f:
+    #     json.dump(t, f)
+    for segment in t[0]['segments']:
+        for word in segment['words']:
+            pass
 
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(start: float, end: float, device="cuda", compute_type='float16') -> dict:
@@ -52,8 +56,8 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
         batch_size = 1
         compute_type = 'int8'
         log_utils.info(f'[CPU] Batch size: {batch_size}, [cyan]compute_type: {compute_type}[/cyan]')
-    # cfg_lang = get_config_value('whisper.language')
-    model_arch="large-v3-turbo"
+    cfg_lang = get_config_value('whisper.language')
+    model_arch = get_config_value('whisper.model')
     cfg_lang = 'auto'
     target_language = None if 'auto' in cfg_lang else cfg_lang
     vad_options = {"vad_onset": 0.500,"vad_offset": 0.363}
@@ -66,6 +70,7 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # segment, sample_rate = librosa.load(SEGMENT_TEMP_PATH, sr=16000)
     segment = whisperx.load_audio(SEGMENT_TEMP_PATH, 16000)
     result = model.transcribe(segment, batch_size)
+    log_utils.success('🎉转录成功！')
 
     os.unlink(SEGMENT_TEMP_PATH)
     gc.collect()
@@ -80,4 +85,15 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     del model_a
     torch.cuda.empty_cache()
 
+    # Since this function may process multiple segments,
+    # the starting point of each segment is considered as 0s by Whisper.
+    # However, in fact, the segments are processed in order.
+    
     return result
+
+if __name__ == '__main__':
+    with open(os.getcwd() + '\\transcript.txt', 'r') as f:
+        t = json.load(f)
+        for segment in t[0]['segments']:
+            for word in segment['words']:
+                print(word['word'])

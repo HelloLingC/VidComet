@@ -26,7 +26,7 @@ def main():
     st.text_input('视频文件', vid_file)
     log_placeholder = st.empty()
     log_utils.observable_handler.subscribe(update)
-    if(st.button('start')):
+    if(st.button('开始', icon='🚀')):
         whisper_local.transcribe(vid_file)
         if os.path.exists(VOCAL_AUDIO_FILE_PATH):
             st.success('音频预处理成功！')

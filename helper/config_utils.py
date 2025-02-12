@@ -1,5 +1,6 @@
 import yaml
 import os
+import log_utils
 
 CWD = None
 
@@ -18,12 +19,12 @@ CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd
 def init_config_helper():
-    global CWD
-    CWD = os.getcwd()
+    if not os.path.exists(CONFIG_FILE_PATH):
+        log_utils.warn('WARNING: Config file not found! Using empty config')
     
 def get_config_value(keys:str):
-    with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
-        configs = yaml.safe_load(CONFIG_FILE_PATH)
+    with open(CONFIG_FILE_PATH, 'r') as f:
+        configs = yaml.safe_load(f)
     
     for key in keys.split('.'):
         if isinstance(configs, dict) and key in configs:

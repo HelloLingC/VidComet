@@ -4,4 +4,5 @@ gpt:
   model: deepseek-reasoner
 
 whisper:
-   
+  language: auto
+  model: large-v3-turbo

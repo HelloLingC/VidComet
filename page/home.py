@@ -58,7 +58,7 @@ def main():
         url_input = st.text_input('输入视频URL')
         res = col1.selectbox('视频分辨率', options_download_res)
         col2.text_input('Cookies')
-    if(st.button('开始', icon='🚀')):
+    if(st.button('下一步', icon='🚀')):
         fname = st.session_state.vid_file
         if uploaded_file is None and fname is None:
                 st.error("请上传视频文件！")
