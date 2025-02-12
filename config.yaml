@@ -1,6 +1,7 @@
 gpt:
   api_url: api.deepseek.com
   api_key: 0
+  model: deepseek-reasoner
 
 whisper:
    

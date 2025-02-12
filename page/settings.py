@@ -6,6 +6,7 @@ col1, col2 = st.columns(2)
 with col1.expander('LLM 设置', True):
     st.text_input('API Url')
     st.text_input('API Key')
+    st.text_input('模型', 'deepseek-r1')
 
 with col1.expander('FFmpeg', True):
     ver = env_check.check_ffmpeg()
@@ -15,10 +16,11 @@ with col1.expander('FFmpeg', True):
 
 with col1.expander('Demucs 设置', True):
     # Pre-trained model
-    st.selectbox('预训练模型', ['htdemucs', 'htdemucs-ft', 'htdemucs_6s', 'mdx_extra_q'])
+    st.selectbox('模型', ['htdemucs', 'htdemucs-ft', 'htdemucs_6s', 'mdx_extra_q'])
 
 with col2.expander('WhisperX 设置', True):
-    st.selectbox('模型', ['large-v2', 'small'])
+    st.selectbox('目标语言', ['auto', 'zh', 'en', 'jp'])
+    st.selectbox('模型', ['Whisper-large-v3-turbo', 'Whisper-large-v3', 'Belle-whisper-large-v3-zh', 'Huan69/Belle-whisper-large-v3-zh-punct-fasterwhisper'])
     st.selectbox('计算设备', ['GPU', 'CPU'])
     if not torch.cuda.is_available():
         st.warning('当前GPU不可用')

@@ -29,7 +29,7 @@ def enhance_vocals(vocals_ratio=2.50):
         log_utils.info(f"Error enhancing vocals: {str(e)}")
         return VOCAL_AUDIO_FILE_PATH  # Fallback to original vocals if enhancement fails
 
-def compress_audio(input: str, output: str= COMPRESSED_AUDIO_PATH):
+def compress_audio(input: str, output: str = COMPRESSED_AUDIO_PATH):
     if not os.path.exists(output):
         log_utils.info(f"正在压缩音频文件...")
         # 16000 Hz, 1 channel, (Whisper default) , 96kbps to keep more details as well as smaller file size
@@ -60,7 +60,7 @@ def get_audio_duration(audio_file: str) -> float:
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     _, stderr = process.communicate()
     output = stderr.decode('utf-8', errors='ignore')
-    
+    print(output)
     try:
         duration_str = [line for line in output.split('\n') if 'Duration' in line][0]
         duration_parts = duration_str.split('Duration: ')[1].split(',')[0].split(':')

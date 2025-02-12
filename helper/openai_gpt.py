@@ -1,10 +1,12 @@
 import openai
 import log_utils
 import config_utils
+from json_repair import repair_json
 
-def ask_gpt(prompt: str, model="gpt-3.5-turbo"):
+def ask_gpt(prompt: str, response_json=True):
     api_url = config_utils.get_config_value('gpt.api_url')
     api_key = config_utils.get_config_value('gpt.api_key')
+    model = config_utils.get_config_value('gpt.model')
     if not api_key :
         log_utils.error("API key is not set!")
         return None
@@ -16,4 +18,11 @@ def ask_gpt(prompt: str, model="gpt-3.5-turbo"):
             {"role": "user", "content": prompt}
         ]
     )
-    return response.choices[0].message["content"]
+    resp = response.choices[0].message["content"]
+    if not response_json:
+        return resp
+    repair_json(resp)
+
+
+if __name__ == "__main__":
+    print(ask_gpt("What is the weather like today?"))

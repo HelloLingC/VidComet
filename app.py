@@ -1,9 +1,10 @@
 import streamlit as st
 from helper import ytp
 import helper.ytp
+from helper import config_utils
 import torch
 import os
-from streamlit_change_language import cst
+# from streamlit_fillter import cst
 import sys
 import os
 
@@ -18,11 +19,12 @@ def main():
         sys.path.append(os.getcwd() +'/helper')
     # print(os.path.abspath(__file__))
     # cst.change(language='cn')
+    config_utils.init_config_helper()
+    
     st.logo('icon.png')
     st.sidebar.header('导航栏')
     
     p1 = st.Page('page/home.py', title='开始')
-    
     p2 = st.Page('page/preprocess.py', title='预处理')
     p3 = st.Page('page/transcribe.py', title='转录')
     settings = st.Page('page/settings.py', title='设置')
