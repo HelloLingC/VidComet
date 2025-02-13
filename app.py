@@ -1,5 +1,4 @@
 import streamlit as st
-import core.ytp
 from core import config_utils
 import torch
 import os
@@ -26,8 +25,8 @@ def main():
     st.sidebar.header('导航栏')
     
     p1 = st.Page('page/home.py', title='开始')
-    p2 = st.Page('page/preprocess.py', title='预处理')
-    p3 = st.Page('page/transcribe.py', title='转录')
+    p2 = st.Page('page/preprocess.py', title='预处理和转录')
+    p3 = st.Page('page/transcribe.py', title='字幕整理')
     settings = st.Page('page/settings.py', title='设置')
     pg = st.navigation([p1, p2, p3, settings])
     pg.run()

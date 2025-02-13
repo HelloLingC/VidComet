@@ -7,6 +7,11 @@ whisper:
   language: auto
   model: large-v3-turbo
 
+# DO NOT MODIFY THE FOLLOWING OPTIONS
+
+language_space_joiner: ['en', 'es', 'fr', 'de', 'it', 'ru']
+language_no_space_joiner: ['zh', 'ja', 'ko']
+
 spacy:
   model_map:
     en: en_core_web_md

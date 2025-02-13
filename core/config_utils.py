@@ -17,6 +17,7 @@ WHISPER_MODEL_DIR = os.path.join(os.getcwd(), 'models')
 CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 
 TRANSCRIPTION_PATH = os.path.join(os.getcwd(), 'output', 'transcript.csv')
+TRANSCRIPTION_SENT_PATH = os.path.join(os.getcwd(), 'output', 'transcript_sent.csv')
 
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd

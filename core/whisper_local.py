@@ -4,6 +4,7 @@ import gc
 import log_utils
 from config_utils import *
 import subprocess
+from shlex import split
 # import librosa
 import core.whisper_preprocess as whisper_preprocess
 import demucs_local
@@ -35,10 +36,14 @@ def transcribe_segments(segments):
         log_utils.info(f"正在转录片段 从 {start} 到 {end} seconds")
         res = transcribe_audio(start, end)
         for segment in res['segments']:
-            texts.append({'start': segment['start'], 'end': segment['end'], 'text': segment['text']})
+            # transcribed text from Whisperx always with inappropriate quotes 
+            text = segment['text'].strip("\"").strip(" ")
+            texts.append({'start': segment['start'], 'end': segment['end'], 'text': text})
             result.extend(segment['words'])
     df = pd.DataFrame(result)
     df.to_csv(TRANSCRIPTION_PATH, index=False)
+    df = pd.DataFrame(texts)
+    df.to_csv(TRANSCRIPTION_SENT_PATH, index=False)
     
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(start: float, end: float, device="cuda", compute_type='float16') -> dict:
@@ -63,7 +68,9 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     model = whisperx.load_model(model_arch, device, compute_type=compute_type, language=target_language, vad_options=vad_options, asr_options=asr_options, download_root=WHISPER_MODEL_DIR)
     # Extract audio segment using ffmpeg
     ffmpeg_cmd = f'ffmpeg -y -i "{COMPRESSED_AUDIO_PATH}" -ss {start} -t {end-start} -vn -ar 32000 -ac 1 "{SEGMENT_TEMP_PATH}"'
-    subprocess.run(ffmpeg_cmd, shell=True, check=True, capture_output=True)
+    # on Windows, it seems like use shell=True sometimes return exit code 1
+    # use shlex.split() to avoid this
+    subprocess.run(split(ffmpeg_cmd), check=True, capture_output=True)
 
     # segment, sample_rate = librosa.load(SEGMENT_TEMP_PATH, sr=16000)
     segment = whisperx.load_audio(SEGMENT_TEMP_PATH, 16000)
@@ -88,10 +95,3 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # However, in fact, the segments are processed in order.
     
     return result
-
-if __name__ == '__main__':
-    with open(os.getcwd() + '\\transcript.txt', 'r') as f:
-        t = json.load(f)
-        for segment in t[0]['segments']:
-            for word in segment['words']:
-                print(word['word'])

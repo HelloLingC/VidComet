@@ -7,6 +7,7 @@ import hashlib
 import math
 
 
+
 class Bilibili(VideoExtractor):
     name = "Bilibili"
 

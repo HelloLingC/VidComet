@@ -2,6 +2,7 @@ import streamlit as st
 from core import log_utils, whisper_local
 from core.config_utils import *
 import os
+import pandas as pd
 
 log_placeholder = None
 msg_arr = ''
@@ -10,9 +11,16 @@ def update(msg):
     msg_arr += '\n'*3 + msg
     log_placeholder.info(msg_arr)
 
-def test():
+def start_transcribe():
+    vid_file = st.session_state.vid_file
+    whisper_local.transcribe(vid_file)
     if os.path.exists(VOCAL_AUDIO_FILE_PATH):
+        st.session_state.step = 3
+        st.success('音频预处理成功！')
+        st.text('人声部分：')
         st.audio(VOCAL_AUDIO_FILE_PATH)
+    else:
+        st.error('VOCAL FILE NOT EXISTED')
 
 def main():
     global log_placeholder
@@ -26,20 +34,14 @@ def main():
     st.text_input('视频文件', vid_file)
     log_placeholder = st.empty()
     log_utils.observable_handler.subscribe(update)
-    if(st.button('开始', icon='🚀')):
-        whisper_local.transcribe(vid_file)
-        if os.path.exists(VOCAL_AUDIO_FILE_PATH):
-            st.success('音频预处理成功！')
-            st.text('人声部分：')
-            st.audio(VOCAL_AUDIO_FILE_PATH)
-        else:
-            st.error('VOCAL FILE NOT EXISTED')
-    
-    st.subheader('转录')
+    if 'step' in st.session_state:
+        st.button('开始', icon='🚀', on_click=start_transcribe)
+    else:
+        st.subheader('转录')
+        st.button('下一步', use_container_width=True)
     st.warning('请先进行音频预处理')
+    st.dataframe(pd.read_csv(TRANSCRIPTION_SENT_PATH))
 
 main()
-# test()
-
 
     

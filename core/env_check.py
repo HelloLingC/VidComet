@@ -1,15 +1,8 @@
 import subprocess
 import torch
 
-def check_torch_cuda():
-    print("Torch version:", torch.__version__)
-    print("CUDA version:", torch.version.cuda)
-    print("cuDNN version:", torch.backends.cudnn.version())
-    print("CUDA available:", torch.cuda.is_available())
-    if torch.cuda.is_available():
-        print("CUDA device:", torch.cuda.get_device_name(torch.cuda.current_device()))
-    else:
-        print("CUDA not available")
+def is_gpu_available():
+    return torch.cuda.is_available()
 
 # if ffmpeg exists return ffmpeg version
 # else, return None
@@ -25,6 +18,3 @@ def check_ffmpeg():
         print('ERR')
         return None
     return None
-
-if __name__ == "__main__":
-    check_torch_cuda()
