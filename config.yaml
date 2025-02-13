@@ -6,3 +6,16 @@ gpt:
 whisper:
   language: auto
   model: large-v3-turbo
+
+spacy:
+  model_map:
+    en: en_core_web_md
+    zh: zh_core_web_md
+    ja: ja_core_web_md
+    ko: ko_core_web_md
+    fr: fr_core_web_md
+    de: de_core_web_md
+    es: es_core_web_md
+    it: it_core_web_md
+    pt: pt_core_web_md
+    ru: ru_core_web_md

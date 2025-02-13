@@ -5,9 +5,10 @@ import log_utils
 from config_utils import *
 import subprocess
 # import librosa
-import helper.whisper_preprocess as whisper_preprocess
+import core.whisper_preprocess as whisper_preprocess
 import demucs_local
 import json
+import pandas as pd
 
 options_model = ["large-v3"]
 
@@ -28,20 +29,17 @@ def transcribe(vid_file):
 
 """transcribe audio segememts one by one"""
 def transcribe_segments(segments):
+    texts = []
     result = []
     for start, end in segments:
         log_utils.info(f"正在转录片段 从 {start} 到 {end} seconds")
         res = transcribe_audio(start, end)
-        result.append(res)
-    handle_transcription(result)
-
-def handle_transcription(t: dict):
-    # with open(os.getcwd() + '\\transcript.txt', 'w') as f:
-    #     json.dump(t, f)
-    for segment in t[0]['segments']:
-        for word in segment['words']:
-            pass
-
+        for segment in res['segments']:
+            texts.append({'start': segment['start'], 'end': segment['end'], 'text': segment['text']})
+            result.extend(segment['words'])
+    df = pd.DataFrame(result)
+    df.to_csv(TRANSCRIPTION_PATH, index=False)
+    
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(start: float, end: float, device="cuda", compute_type='float16') -> dict:
     if(device == "cuda" and not torch.cuda.is_available()):

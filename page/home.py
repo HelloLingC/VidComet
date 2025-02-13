@@ -1,5 +1,5 @@
 import streamlit as st
-from helper import ytp
+from core import ytp
 import tkinter as tk
 from tkinter import filedialog
 
@@ -71,5 +71,5 @@ def main():
         else:
             st.spinner('正在下载...')
             start_via_url(url_input, res)
-            
+ 
 main()

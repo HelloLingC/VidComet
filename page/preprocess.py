@@ -1,6 +1,6 @@
 import streamlit as st
-from helper import log_utils, whisper_local
-from helper.config_utils import *
+from core import log_utils, whisper_local
+from core.config_utils import *
 import os
 
 log_placeholder = None

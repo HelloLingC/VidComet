@@ -1,8 +1,34 @@
 import streamlit as st
 import torch
-from helper import env_check
+from core import env_check
 
-col1, col2 = st.columns(2)
+st.markdown(
+    """
+    <style>
+    .stMain {
+        align-items: center;
+    }
+    .stMainBlockContainer {
+        max-width: 100%;
+        padding: 6rem 3rem 10rem;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+col0, col1, col2 = st.columns(3)
+
+with col0.expander('Nvidia 信息', True):
+    st.text("Torch 版本：" + torch.__version__)
+    st.text("CUDA 版本：" + torch.version.cuda)
+    st.text("cuDNN 版本：" + str(torch.backends.cudnn.version()))
+    if torch.cuda.is_available():
+        st.success('当前GPU可用')
+        st.info("CUDA 设备：" + torch.cuda.get_device_name(torch.cuda.current_device()))
+    else:
+        st.error('当前GPU不可用')
+
 with col1.expander('LLM 设置', True):
     st.text_input('API Url')
     st.text_input('API Key')
@@ -22,10 +48,6 @@ with col2.expander('WhisperX 设置', True):
     st.selectbox('目标语言', ['auto', 'zh', 'en', 'jp'])
     st.selectbox('模型', ['Whisper-large-v3-turbo', 'Whisper-large-v3', 'Belle-whisper-large-v3-zh', 'Huan69/Belle-whisper-large-v3-zh-punct-fasterwhisper'])
     st.selectbox('计算设备', ['GPU', 'CPU'])
-    if not torch.cuda.is_available():
-        st.warning('当前GPU不可用')
-    else:
-        st.success('当前GPU可用')
     st.checkbox('计算类型 float16', True)
     st.write('如果显存低请取消勾选')
     st.number_input('Batch Size')

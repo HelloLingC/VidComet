@@ -1,7 +1,6 @@
 import streamlit as st
-from helper import ytp
-import helper.ytp
-from helper import config_utils
+import core.ytp
+from core import config_utils
 import torch
 import os
 # from streamlit_fillter import cst
@@ -15,11 +14,13 @@ torch.classes.__path__ = [os.path.join(torch.__path__[0], torch.classes.__file__
 st.set_page_config(page_title='Subtitle Comet', page_icon='icon.png')
 
 def main():
-    if(os.getcwd() +'/helper' not in sys.path):
-        sys.path.append(os.getcwd() +'/helper')
-    # print(os.path.abspath(__file__))
+    if(os.getcwd() +'/core' not in sys.path):
+        sys.path.append(os.getcwd() +'/core')
+    # file_dir = os.path.dirname(__file__)
+    # if file_dir not in sys.path:
+    #     sys.path.append(file_dir)
     # cst.change(language='cn')
-    config_utils.init_config_helper()
+    # config_utils.init_config_helper()
     
     st.logo('icon.png')
     st.sidebar.header('导航栏')
