@@ -1,11 +1,11 @@
-import openai
+from openai import OpenAI
 import log_utils
 import config_utils
 from json_repair import repair_json
 
 DEFAULT_SYSTEM_PROMPT = "you are a helpful, knowledgeable AI assistant."
 
-def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, response_json=True):
+def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, response_json=False):
     api_url = config_utils.get_config_value('gpt.api_url')
     api_key = config_utils.get_config_value('gpt.api_key')
     model = config_utils.get_config_value('gpt.model')
@@ -16,19 +16,19 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, response_js
         log_utils.error("API key is not set!")
         return None
     
-    response = openai.ChatCompletion.create(
-        api_url=api_url,
-        api_key=api_key,
+    client = OpenAI(api_key=api_key, base_url=api_url)
+    
+    response = client.chat.completions.create(
         model=model,
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
     )
-    resp = response.choices[0].message["content"]
+    resp = response.choices[0].message.content
     if not response_json:
         return resp
-    repair_json(resp)
+    return repair_json(resp)
 
 
 if __name__ == "__main__":

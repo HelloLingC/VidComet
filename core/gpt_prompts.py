@@ -1,7 +1,7 @@
 from config_utils import *
 import json
 
-def get_split_prompt(num_parts: int, word_limit: int):
+def get_split_prompt(word_limit: int):
     """
     num_parts: number of parts to split the sentence into
     word_limit: maximum number of words in each part
@@ -11,7 +11,7 @@ def get_split_prompt(num_parts: int, word_limit: int):
 You are a professional Netflix subtitle splitter.
 
 ### Task
-Split the given subtitle text into {num_parts} parts, each less than {word_limit} words.
+Split the given subtitle text into appropriate parts, each part less than {word_limit} words.
 
 ### Instructions
 1. Maintain sentence meaning coherence according to Netflix subtitle standards
@@ -24,7 +24,7 @@ Split the given subtitle text into {num_parts} parts, each less than {word_limit
 Input:
 the upgraded claude sonnet is now available for all users developers can build with the computer use beta on the anthropic api amazon bedrock and google cloud’s vertex ai the new claude haiku will be released later this month
 Output:
-the upgraded claude sonnet is now available for all users<br>developers can build with the computer use beta<br>on the anthropic api amazon bedrock and google cloud’s vertex ai<br>the new claude haiku will be released later this month
+the upgraded claude sonnet is now available for all users developers can build with the computer use beta<br>on the anthropic api amazon bedrock and google cloud’s vertex ai<br>the new claude haiku will be released later this month
 
 """.strip()
     return split_prompt

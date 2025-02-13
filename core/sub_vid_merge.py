@@ -1,5 +1,6 @@
 import os, subprocess, time, sys
 from rich import print as rprint
+from config_utils import *
 import cv2
 import numpy as np
 import platform
@@ -40,7 +41,7 @@ def merge_subtitles_to_video():
     os.makedirs(os.path.dirname(OUTPUT_VIDEO), exist_ok=True)
 
     # Check resolution
-    if not load_key("burn_subtitles"):
+    if not get_config_value("burn_subtitles"):
         rprint("[bold yellow]Warning: A 0-second black video will be generated as a placeholder as subtitles are not burned in.[/bold yellow]")
 
         # Create a black frame
@@ -63,7 +64,7 @@ def merge_subtitles_to_video():
     video.release()
     rprint(f"[bold green]Video resolution: {TARGET_WIDTH}x{TARGET_HEIGHT}[/bold green]")
     ffmpeg_cmd = [
-        'ffmpeg', '-i', video_file,
+        'ffmpeg', '-i', video_file, 
         '-vf', (
             f"scale={TARGET_WIDTH}:{TARGET_HEIGHT}:force_original_aspect_ratio=decrease,"
             f"pad={TARGET_WIDTH}:{TARGET_HEIGHT}:(ow-iw)/2:(oh-ih)/2,"

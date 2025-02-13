@@ -1,7 +1,7 @@
 gpt:
-  api_url: api.deepseek.com
-  api_key: 0
-  model: deepseek-reasoner
+  api_url: https://api.deepseek.com
+  api_key: sk-d30e4c3aca6040b6a9bb9230df87baab
+  model: deepseek-chat
 
 whisper:
   language: auto

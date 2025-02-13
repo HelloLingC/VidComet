@@ -1,5 +1,5 @@
 import itertools
-import core.split_main as split_main
+import split_main
 
 """"""
 def _is_vaild_sentence(sent):
