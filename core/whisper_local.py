@@ -4,6 +4,7 @@ import gc
 import log_utils
 from config_utils import *
 import subprocess
+import whisper_preprocess as preprocess
 import shlex
 # import librosa
 import core.whisper_preprocess as whisper_preprocess
@@ -15,14 +16,14 @@ options_model = ["large-v3"]
 
 # Preprocess video and transcribe audio via WhisperX
 def transcribe(vid_file):
-    """# 0 音频轨道分离
+    # 0 音频轨道分离
     preprocess.convert_to_audio(vid_file)
     # 1 人声分离
     demucs_local.start_demucs()
     # 2 人声增强
     enhanced = preprocess.enhance_vocals()
     # 3 音频压缩
-    preprocess.compress_audio(enhanced)"""
+    preprocess.compress_audio(enhanced)
     # 4 音频切分
     segments = whisper_preprocess.split_audio(COMPRESSED_AUDIO_PATH)
     # whisper转录
@@ -38,12 +39,15 @@ def transcribe_segments(segments):
         for segment in res['segments']:
             # transcribed text from Whisperx always with inappropriate quotes 
             text = segment['text'].strip("\"").strip(" ")
-            texts.append({'start': segment['start'], 'end': segment['end'], 'text': text})
+            # for sententces, we don't need timeline
+            # texts.append({'start': segment['start'], 'end': segment['end'], 'text': text})
+            texts.append(text)
+            # words prop is a word list
             result.extend(segment['words'])
     df = pd.DataFrame(result)
     df.to_csv(TRANSCRIPTION_PATH, index=False)
-    df = pd.DataFrame(texts)
-    df.to_csv(TRANSCRIPTION_SENT_PATH, index=False)
+    with open(TRANSCRIPTION_SENT_PATH, 'w', encoding='utf-8') as f:
+        f.writelines(texts)
     
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(start: float, end: float, device="cuda", compute_type='float16') -> dict:
@@ -76,6 +80,8 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     segment = whisperx.load_audio(SEGMENT_TEMP_PATH, 16000)
     result = model.transcribe(segment, batch_size, print_progress=True)
     log_utils.success('🎉转录成功！')
+    
+    set_config_value('whisper.detected_language', result['language'])
 
     os.unlink(SEGMENT_TEMP_PATH)
     gc.collect()

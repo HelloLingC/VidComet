@@ -13,8 +13,8 @@ translator:
 
 # DO NOT MODIFY THE FOLLOWING OPTIONS
 
-language_space_joiner: ['en', 'es', 'fr', 'de', 'it', 'ru']
-language_no_space_joiner: ['zh', 'ja', 'ko']
+language_space_joiner: [en, es, fr, de, it, ru]
+language_no_space_joiner: [zh, ja, ko]
 
 spacy:
   model_map:
@@ -28,3 +28,4 @@ spacy:
     it: it_core_web_md
     pt: pt_core_web_md
     ru: ru_core_web_md
+lal: a

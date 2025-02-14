@@ -6,6 +6,7 @@ from config_utils import *
 import env_check
 import spacy
 import split_comma
+import split_llm
 
 def prepare_spacy_model(lang):
     if lang == 'auto':
@@ -19,7 +20,7 @@ def prepare_spacy_model(lang):
         nlp = spacy.load(model_name)    
     return nlp
 
-def split():
+def start_split(sents: list[str]):
     if env_check.is_gpu_available():
         spacy.prefer_gpu()
     else:
@@ -27,10 +28,13 @@ def split():
         
     lang = get_config_value('whisper.language')
     # if whisper.language set auto
-    df = pd.read_csv(TRANSCRIPTION_SENT_PATH)
-    for text in df['text']:
-        t = split_comma.split_sent_by_comma(text, prepare_spacy_model('en'))
-    
+    if lang == 'auto':
+        lang = get_config_value('whisper.detected_language')
+    # temporarily use only llm splitter
+    # for text in sents:
+    #     t = split_comma.split_sent_by_comma(text, prepare_spacy_model(lang))
+
+    split_llm(sents, prepare_spacy_model(lang))
 
 def get_joiner(lang):
     if lang in get_config_value('language_space_joiner'):
@@ -40,6 +44,3 @@ def get_joiner(lang):
     else:
         log_utils.error(f"Language {lang} not supported for joining.")
         return " "
-    
-if __name__ == '__main__':
-    prepare_spacy_model()

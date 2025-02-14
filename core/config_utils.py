@@ -1,4 +1,4 @@
-import yaml
+import ruamel.yaml
 import os
 import log_utils
 
@@ -33,7 +33,8 @@ def init_config_helper():
     
 def get_config_value(keys:str):
     with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
-        configs = yaml.safe_load(f)
+        yaml = ruamel.yaml.YAML(typ='rt')
+        configs = yaml.load(f)
     
     for key in keys.split('.'):
         if isinstance(configs, dict) and key in configs:
@@ -41,3 +42,31 @@ def get_config_value(keys:str):
         else:
             raise KeyError(f'{key} not found in config file!')
     return configs
+
+# Todo: create a new column
+def set_config_value(key_str: str, value: str):
+    with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
+        yaml = ruamel.yaml.YAML(typ='rt')
+        configs = yaml.load(f)
+
+    if not isinstance(configs, dict):
+        print('ERROR: Config file is not a dictionary!')
+        return
+    keys = key_str.split('.')
+    current = configs
+    for k in keys[:-1]:
+        if isinstance(current, dict) and k in current:
+            current = current[k]
+        else:
+            return False
+
+    if isinstance(current, dict) and keys[-1] in current:
+        current[keys[-1]] = value
+        with open(CONFIG_FILE_PATH, 'w', encoding='utf-8') as file:
+            yaml.dump(configs, file)
+        return True
+    else:
+        raise KeyError(f"Key '{keys[-1]}' not found in configuration")
+
+if __name__ == '__main__':
+    set_config_value('whisper.lal', 'a')

@@ -17,8 +17,10 @@ def send_request(req):
     resp = resp.replace('.', '\n')
     return resp
 
-
-def split_by_llm(sents, nlp, num_threads: int=3, batch_size: int=5):
+def split_by_llm(sents: list[str], nlp, num_threads: int=3, batch_size: int=5):
+    """
+    nlp: Spacy model
+    """
     word_limit = 20
     unchanged_indexs = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
@@ -55,8 +57,3 @@ def split_by_llm(sents, nlp, num_threads: int=3, batch_size: int=5):
             split_results.insert(i, sents[i].strip(' ').replace('.', '') + '\n')
         with open(SPLIT_LLM_PATH,'w') as file:
             file.writelines(split_results)
-
-if __name__ == '__main__':
-    df = pandas.read_csv(TRANSCRIPTION_SENT_PATH)
-    nlp = split_main.prepare_spacy_model('en')
-    split_by_llm(df['text'].tolist(), nlp)

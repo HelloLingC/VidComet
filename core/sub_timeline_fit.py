@@ -29,10 +29,11 @@ def generate_srt(subtitles: list):
             # 写入字幕文本
             f.write(f"{text}\n\n")
 
-def get_sent_timestamp(df_words: pd.DataFrame, sents: list[str]):
+def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: list[float]):
     """
-    df_words: 语音转录的单词表 每个word包含start, end, text
-    df_sents: 需要进行时间轴对齐的句子
+    df_words: word matrix from whisper. Each word contains start, end, text
+    sents: 需要进行时间轴对齐的句子
+    t_sents: The translation of sentences (if have). 
     """
     all_words_str = ''
     word_pos_index = {}
@@ -64,7 +65,8 @@ def get_sent_timestamp(df_words: pd.DataFrame, sents: list[str]):
                 timestamp_list.append((
                     float(df_words['start'][start_word_idx]),
                     float(df_words['end'][end_word_idx]),
-                    sent
+                    sent,
+                    t_sents[i] if t_sents else None
                 ))  
                 
                 current_pos += sent_len
@@ -79,5 +81,5 @@ def get_sent_timestamp(df_words: pd.DataFrame, sents: list[str]):
 if __name__ == '__main__':
     with open(SPLIT_LLM_PATH, 'r') as f:
         df_sents = f.readlines()
-    df = pd.read_csv(TRANSCRIPTION_PATH)
-    get_sent_timestamp(df, df_sents)
+    words = pd.read_csv(TRANSCRIPTION_PATH)
+    combine_sent_timestamp(words, df_sents)
