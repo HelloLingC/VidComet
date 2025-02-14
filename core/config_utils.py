@@ -14,10 +14,13 @@ WHISPER_MODEL_DIR = os.path.join(os.getcwd(), 'models')
 
 CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 
+# Whisper transcription word by word
 TRANSCRIPTION_PATH = os.path.join(os.getcwd(), 'output', 'transcript.csv')
+# Whisper transcription but only sentences without timeline
 TRANSCRIPTION_SENT_PATH = os.path.join(os.getcwd(), 'output', 'transcript_sent.csv')
 
 SPLIT_LLM_PATH = os.path.join(os.getcwd(), 'output', 'split_llm.txt')
+TRANSLATE_LLM_PATH = os.path.join(os.getcwd(), 'output', 'tranlated_llm.txt')
 
 SRT_PATH = os.path.join(os.getcwd(), 'output', 'srt.srt')
 SRT_TRANSLATION_PATH = os.path.join(os.getcwd(), 'output', 'srt_translation.srt')
@@ -29,7 +32,7 @@ def init_config_helper():
         log_utils.warn('WARNING: Config file not found! Using empty config')
     
 def get_config_value(keys:str):
-    with open(CONFIG_FILE_PATH, 'r') as f:
+    with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
         configs = yaml.safe_load(f)
     
     for key in keys.split('.'):

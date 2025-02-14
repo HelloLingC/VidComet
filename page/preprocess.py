@@ -23,12 +23,11 @@ def start_transcribe():
         st.error('VOCAL FILE NOT EXISTED')
 
 def main():
+    global log_placeholder
+    st.header('生成字幕')
     tab = st.tabs(['预处理', '配置'])
     with tab[0]:
         pass
-
-    global log_placeholder
-    st.header('生成字幕')
     st.subheader('预处理')
     
     if not 'vid_file' in st.session_state:
@@ -38,10 +37,9 @@ def main():
     st.text_input('视频文件', vid_file)
     log_placeholder = st.empty()
     log_utils.observable_handler.subscribe(update)
-    if 'step' in st.session_state:
+    if not 'step' in st.session_state:
         st.button('开始', icon='🚀', on_click=start_transcribe)
     else:
-        st.subheader('转录')
         st.button('下一步', use_container_width=True)
         st.dataframe(pd.read_csv(TRANSCRIPTION_SENT_PATH))
 

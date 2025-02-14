@@ -71,6 +71,7 @@ def main():
         else:
             st.spinner('正在下载...')
             start_via_url(url_input, res)
+            
     # 提前的导入下一页面的whisperx包，防止下一页空白期过久
     # (足足有7秒)
     __import__('whisperx')

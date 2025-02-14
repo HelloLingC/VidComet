@@ -5,7 +5,11 @@ gpt:
 
 whisper:
   language: auto
+  detected_language: en
   model: large-v3-turbo
+
+translator:
+  target: Chinese # Translate subtitles into...
 
 # DO NOT MODIFY THE FOLLOWING OPTIONS
 

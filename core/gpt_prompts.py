@@ -1,5 +1,6 @@
 from config_utils import *
 import json
+from string import Template
 
 def get_split_prompt(word_limit: int):
     """
@@ -32,33 +33,16 @@ the upgraded claude sonnet is now available for all users developers can build w
 def get_summary_prompt():
     pass
 
-def get_translation_prompt(shared_prompt):
-    TARGET_LANGUAGE = get_config_value("target_language")
-    # Split lines by \n
-    line_splits = lines.split('\n')
-    
-    # Create JSON return format example
-    json_format = {}
-    for i, line in enumerate(line_splits, 1):
-        json_format[i] = {
-            "origin": line,
-            "direct": f"<<direct {TARGET_LANGUAGE} translation>>"
-        }
-    
+def get_translation_prompt():
+    TARGET_LANGUAGE = get_config_value("translator.target")
     src_language = get_config_value("whisper.detected_language")
+
     prompt_faithfulness = '''
 ### Role
-You are a professional Netflix subtitle translator, fluent in both {src_language} and {TARGET_LANGUAGE}. Your expertise lies in accurately understanding the semantics and structure of the original {src_language} text and faithfully translating it into {TARGET_LANGUAGE} while preserving the original meaning.
+You are a professional Netflix subtitle translator, fluent in both ${src_language} and {TARGET_LANGUAGE}. Your expertise lies in accurately understanding the semantics and structure of the original {src_language} text and faithfully translating it into {TARGET_LANGUAGE} while preserving the original meaning.
 
 ### Task
-We have a segment of original {src_language} subtitles that need to be directly translated into {TARGET_LANGUAGE}. These subtitles come from a specific context and may contain specific themes and terminology.
-
-### Requirements
-1. Translate the original {src_language} subtitles into {TARGET_LANGUAGE} line by line
-2. Ensure the translation is faithful to the original, accurately conveying the original meaning
-3. Consider the context and professional terminology
-
-{shared_prompt}
+We have a segment of original ${src_language} subtitles that need to be directly translated into {TARGET_LANGUAGE}. These subtitles come from a specific context and may contain specific themes and terminology.
 
 ### Translation Principles
 1. Faithful to the original: Accurately convey the content and meaning of the original text, without arbitrarily changing, adding, or omitting content.
@@ -72,6 +56,7 @@ A JSON structure where each subtitle is identified by a unique numeric key:
   "2": "<<< Original Content >>>",
   ...
 }
+
 ### Output Format
 
 Return a pure JSON following this structure and translate into ${target_language}:
@@ -85,7 +70,28 @@ Return a pure JSON following this structure and translate into ${target_language
   ...
 }
 
-Please complete the following JSON data, where << >> represents placeholders that should not appear in your answer, and return your translation results in JSON format:
-{json.dumps(json_format, ensure_ascii=False, indent=4)}
+Please notice << >> represents placeholders that should not appear in your answer
+
+### EXAMPLE INPUT
+{
+  "1": "为了实现双碳目标，中国正在努力推动碳达峰和碳中和。",
+  "2": "这项技术真是YYDS！"
+}
+
+### EXAMPLE OUTPUT
+{
+  "1": {
+    "translation": "In order to achieve the dual carbon goals, China is working hard to promote carbon peaking and carbon neutrality.",
+    "free_translation": "To realize the dual carbon goals, China is striving to advance carbon peaking and carbon neutrality.",
+    "revise_suggestions": "该句中涉及多个专业术语，如“dual carbon goals”（双碳目标）、“carbon peaking”（碳达峰）和“carbon neutrality”（碳中和），已参照相关术语词汇对应表进行翻译，确保专业性与准确性。在意译阶段，建议使用“To realize”替代冗长的“In order to achieve”，同时将“working hard to promote”调整为更简洁有力的“striving to advance”，以增强表达效果，符合视频字幕的简洁性和流畅性。",
+    "revised_translation": "To realize the dual carbon goals, China is striving to advance carbon peaking and carbon neutrality."
+  },
+  "2": {
+    "translation": "This technology is really YYDS!",
+    "free_translation": "This technology is absolutely the GOAT!",
+    "revise_suggestions": "‘YYDS’作为中文网络流行语，在英语中缺乏直接对应。参考文化背景和表达习惯，将其意译为‘GOAT’（Greatest Of All Time），既保留了原文的赞美和推崇之情，又符合英语表达习惯。在此基础上，使用‘absolutely’替代‘really’使语气更加强烈和自然，适合视频聊天的语境。",
+    "revised_translation": "This technology is absolutely the GOAT!"
+  }
+}
 '''
-    return prompt_faithfulness.strip()
+    return Template(prompt_faithfulness.strip()).substitute(src_language=src_language, target_language=TARGET_LANGUAGE)
