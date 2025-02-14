@@ -4,7 +4,7 @@ import gc
 import log_utils
 from config_utils import *
 import subprocess
-from shlex import split
+import shlex
 # import librosa
 import core.whisper_preprocess as whisper_preprocess
 import demucs_local
@@ -70,11 +70,11 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     ffmpeg_cmd = f'ffmpeg -y -i "{COMPRESSED_AUDIO_PATH}" -ss {start} -t {end-start} -vn -ar 32000 -ac 1 "{SEGMENT_TEMP_PATH}"'
     # on Windows, it seems like use shell=True sometimes return exit code 1
     # use shlex.split() to avoid this
-    subprocess.run(split(ffmpeg_cmd), check=True, capture_output=True)
+    subprocess.run(shlex.split(ffmpeg_cmd), check=True, capture_output=True)
 
     # segment, sample_rate = librosa.load(SEGMENT_TEMP_PATH, sr=16000)
     segment = whisperx.load_audio(SEGMENT_TEMP_PATH, 16000)
-    result = model.transcribe(segment, batch_size)
+    result = model.transcribe(segment, batch_size, print_progress=True)
     log_utils.success('🎉转录成功！')
 
     os.unlink(SEGMENT_TEMP_PATH)

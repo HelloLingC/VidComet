@@ -32,7 +32,7 @@ the upgraded claude sonnet is now available for all users developers can build w
 def get_summary_prompt():
     pass
 
-def get_translation_prompt(lines, shared_prompt):
+def get_translation_prompt(shared_prompt):
     TARGET_LANGUAGE = get_config_value("target_language")
     # Split lines by \n
     line_splits = lines.split('\n')
@@ -46,14 +46,14 @@ def get_translation_prompt(lines, shared_prompt):
         }
     
     src_language = get_config_value("whisper.detected_language")
-    prompt_faithfulness = f'''
-### Role Definition
-You are a professional Netflix subtitle translator, fluent in both {src_language} and {TARGET_LANGUAGE}, as well as their respective cultures. Your expertise lies in accurately understanding the semantics and structure of the original {src_language} text and faithfully translating it into {TARGET_LANGUAGE} while preserving the original meaning.
+    prompt_faithfulness = '''
+### Role
+You are a professional Netflix subtitle translator, fluent in both {src_language} and {TARGET_LANGUAGE}. Your expertise lies in accurately understanding the semantics and structure of the original {src_language} text and faithfully translating it into {TARGET_LANGUAGE} while preserving the original meaning.
 
-### Task Background
+### Task
 We have a segment of original {src_language} subtitles that need to be directly translated into {TARGET_LANGUAGE}. These subtitles come from a specific context and may contain specific themes and terminology.
 
-### Task Description
+### Requirements
 1. Translate the original {src_language} subtitles into {TARGET_LANGUAGE} line by line
 2. Ensure the translation is faithful to the original, accurately conveying the original meaning
 3. Consider the context and professional terminology
@@ -65,11 +65,26 @@ We have a segment of original {src_language} subtitles that need to be directly 
 2. Accurate terminology: Use professional terms correctly and maintain consistency in terminology.
 3. Understand the context: Fully comprehend and reflect the background and contextual relationships of the text.
 
-### Subtitle Data
-<subtitles>
-{lines}
-</subtitles>
+### Input Format
+A JSON structure where each subtitle is identified by a unique numeric key:
+{
+  "1": "<<< Original Content >>>",
+  "2": "<<< Original Content >>>",
+  ...
+}
 ### Output Format
+
+Return a pure JSON following this structure and translate into ${target_language}:
+{
+  "1": {
+    "translation": "<<< 第一轮直译:逐字逐句忠实原文,不遗漏任何信息。直译时力求忠实原文，使用${target_language} >>>",
+    "free_translation": "<<< 第二轮意译:在保证原文意思不改变的基础上用通俗流畅的${target_language}意译原文，适度采用一些中文成语、熟语、网络流行语等,使译文更加地道易懂 >>>",
+    "revise_suggestions": "<<< 第三轮改进建议:仔细审视以上译文,检测是否参考术语词汇翻译对应表以及要求（如果有）。结合注意事项，指出格式准确性、语句连贯性，阅读习惯和语言文化，给出具体改进建议。 >>>",
+    "revised_translation": "<<< 第四轮定稿:择优选取整合,修改润色,最终定稿出一个简洁畅达、符合${target_language}阅读习惯和语言文化的译文 >>>"
+  },
+  ...
+}
+
 Please complete the following JSON data, where << >> represents placeholders that should not appear in your answer, and return your translation results in JSON format:
 {json.dumps(json_format, ensure_ascii=False, indent=4)}
 '''
