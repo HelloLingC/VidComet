@@ -23,6 +23,10 @@ def start_transcribe():
         st.error('VOCAL FILE NOT EXISTED')
 
 def main():
+    tab = st.tabs(['预处理', '配置'])
+    with tab[0]:
+        pass
+
     global log_placeholder
     st.header('生成字幕')
     st.subheader('预处理')
@@ -39,7 +43,7 @@ def main():
     else:
         st.subheader('转录')
         st.button('下一步', use_container_width=True)
-    st.dataframe(pd.read_csv(TRANSCRIPTION_SENT_PATH))
+        st.dataframe(pd.read_csv(TRANSCRIPTION_SENT_PATH))
 
 main()
 
