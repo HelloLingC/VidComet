@@ -1,6 +1,7 @@
 import streamlit as st
 import torch
 from core import env_check
+from core.config_utils import *
 
 st.markdown(
     """
@@ -30,9 +31,9 @@ with col0.expander('Nvidia 信息', True):
         st.error('当前GPU不可用')
 
 with col1.expander('LLM 设置', True):
-    st.text_input('API Url')
-    st.text_input('API Key')
-    st.text_input('模型', 'deepseek-r1')
+    st.text_input('API Url', get_config_value('gpt.api_url'))
+    st.text_input('API Key', get_config_value('gpt.api_key'))
+    st.text_input('模型', get_config_value('gpt.model'))
 
 with col1.expander('FFmpeg', True):
     ver = env_check.check_ffmpeg()

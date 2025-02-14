@@ -16,16 +16,19 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, response_js
         log_utils.error("API key is not set!")
         return None
     
-    client = OpenAI(api_key=api_key, base_url=api_url)
-    
-    response = client.chat.completions.create(
-        model=model,
-        messages=[
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
-        ]
-    )
-    resp = response.choices[0].message.content
+    client = OpenAI(api_key=api_key, base_url=api_url, max_retries=3)
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        resp = response.choices[0].message.content
+    except Exception as e:
+        log_utils.error(f"Error while asking GPT: {e}")
+        return None
     if not response_json:
         return resp
     return repair_json(resp)

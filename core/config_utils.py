@@ -2,8 +2,6 @@ import yaml
 import os
 # import log_utils
 
-CWD = None
-
 AUDIO_DIR = os.path.join(os.getcwd(), 'output', 'audio')
 RAW_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'raw.mp3')
 VOCAL_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'htdemucs', 'raw', 'vocals.mp3')
@@ -19,6 +17,8 @@ CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 TRANSCRIPTION_PATH = os.path.join(os.getcwd(), 'output', 'transcript.csv')
 TRANSCRIPTION_SENT_PATH = os.path.join(os.getcwd(), 'output', 'transcript_sent.csv')
 
+SRT_PATH = os.path.join(os.getcwd(), 'output', 'srt.srt')
+SRT_TRANSLATION_PATH = os.path.join(os.getcwd(), 'output', 'srt_translation.srt')
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd
 # def init_config_helper():

@@ -39,7 +39,6 @@ def main():
     else:
         st.subheader('转录')
         st.button('下一步', use_container_width=True)
-    st.warning('请先进行音频预处理')
     st.dataframe(pd.read_csv(TRANSCRIPTION_SENT_PATH))
 
 main()
