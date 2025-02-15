@@ -1,6 +1,6 @@
 import os, subprocess, time, sys
 from rich import print as rprint
-from config_utils import *
+import config_utils as cfg
 import cv2
 import numpy as np
 import platform
@@ -21,14 +21,14 @@ SRC_OUTLINE_WIDTH = 1
 SRC_SHADOW_COLOR = '&H80000000'
 TRANS_FONT_COLOR = '&H00FFFF'
 TRANS_OUTLINE_COLOR = '&H000000'
-TRANS_OUTLINE_WIDTH = 1 
+TRANS_OUTLINE_WIDTH = 1
 TRANS_BACK_COLOR = '&H33000000'
 
 OUTPUT_DIR = "output"
-OUTPUT_VIDEO = f"{OUTPUT_DIR}/output_sub.mp4"
-SRC_SRT = f"{OUTPUT_DIR}/src.srt"
-TRANS_SRT = f"{OUTPUT_DIR}/trans.srt"
-    
+OUTPUT_VIDEO = f"{cfg.AUDIO_DIR}\\output_sub.mp4"
+SRC_SRT = cfg.SRT_PATH
+TRANS_SRT = cfg.SRT_TRANS_PATH
+
 def check_gpu_available():
     try:
         result = subprocess.run(['ffmpeg', '-encoders'], capture_output=True, text=True)
@@ -37,11 +37,11 @@ def check_gpu_available():
         return False
 
 def merge_subtitles_to_video():
-    video_file = find_video_files()
+    video_file = 'C:\\Users\\lingc\\Downloads\\input.mp4'
     os.makedirs(os.path.dirname(OUTPUT_VIDEO), exist_ok=True)
 
     # Check resolution
-    if not get_config_value("burn_subtitles"):
+    if not cfg.get_config_value("burn_subtitles", True):
         rprint("[bold yellow]Warning: A 0-second black video will be generated as a placeholder as subtitles are not burned in.[/bold yellow]")
 
         # Create a black frame
@@ -63,15 +63,16 @@ def merge_subtitles_to_video():
     TARGET_HEIGHT = int(video.get(cv2.CAP_PROP_FRAME_HEIGHT))
     video.release()
     rprint(f"[bold green]Video resolution: {TARGET_WIDTH}x{TARGET_HEIGHT}[/bold green]")
+    print(SRC_SRT.replace('\\', '\\\\').replace(':', '\\:'))
     ffmpeg_cmd = [
-        'ffmpeg', '-i', video_file, 
+        'ffmpeg', '-i', video_file,
         '-vf', (
             f"scale={TARGET_WIDTH}:{TARGET_HEIGHT}:force_original_aspect_ratio=decrease,"
             f"pad={TARGET_WIDTH}:{TARGET_HEIGHT}:(ow-iw)/2:(oh-ih)/2,"
-            f"subtitles={SRC_SRT}:force_style='FontSize={SRC_FONT_SIZE},FontName={FONT_NAME}," 
+            f"subtitles=\'{SRC_SRT.replace('\\', '\\\\').replace(':', '\:\\')}\':force_style='FontSize={SRC_FONT_SIZE},FontName={FONT_NAME}," 
             f"PrimaryColour={SRC_FONT_COLOR},OutlineColour={SRC_OUTLINE_COLOR},OutlineWidth={SRC_OUTLINE_WIDTH},"
             f"ShadowColour={SRC_SHADOW_COLOR},BorderStyle=1',"
-            f"subtitles={TRANS_SRT}:force_style='FontSize={TRANS_FONT_SIZE},FontName={TRANS_FONT_NAME},"
+            f"subtitles=\'{TRANS_SRT.replace('\\', '\\\\').replace(':', '\:\\')}\':force_style='FontSize={TRANS_FONT_SIZE},FontName={TRANS_FONT_NAME},"
             f"PrimaryColour={TRANS_FONT_COLOR},OutlineColour={TRANS_OUTLINE_COLOR},OutlineWidth={TRANS_OUTLINE_WIDTH},"
             f"BackColour={TRANS_BACK_COLOR},Alignment=2,MarginV=27,BorderStyle=4'"
         ).encode('utf-8'),
@@ -80,6 +81,7 @@ def merge_subtitles_to_video():
     gpu_available = check_gpu_available()
     if gpu_available:
         rprint("[bold green]NVIDIA GPU encoder detected, will use GPU acceleration.[/bold green]")
+        # The minimum required Nvidia driver for nvenc is 570.0 or newer
         ffmpeg_cmd.extend(['-c:v', 'h264_nvenc'])
     else:
         rprint("[bold yellow]No NVIDIA GPU encoder detected, will use CPU instead.[/bold yellow]")

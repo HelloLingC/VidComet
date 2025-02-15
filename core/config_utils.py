@@ -31,7 +31,7 @@ def init_config_helper():
     if not os.path.exists(CONFIG_FILE_PATH):
         log_utils.warn('WARNING: Config file not found! Using empty config')
     
-def get_config_value(keys:str):
+def get_config_value(keys: str, default=None):
     with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
         yaml = ruamel.yaml.YAML(typ='rt')
         configs = yaml.load(f)
@@ -40,6 +40,8 @@ def get_config_value(keys:str):
         if isinstance(configs, dict) and key in configs:
             configs = configs[key]
         else:
+            if default is not None:
+                return default
             raise KeyError(f'{key} not found in config file!')
     return configs
 
