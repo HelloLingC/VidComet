@@ -15,15 +15,11 @@ def main():
     global log_placeholder
     st.header('字幕切分')
 
-    with open(cfg.TRANSCRIPTION_SENT_PATH, 'r', encoding='utf-8') as f:
-        sents = f.readlines()
-    st.write(sents)
-
     core.log_utils.observable_handler.subscribe(update)
     log_placeholder = st.empty()
 
     if(st.button('LLM 切分')):
-        split.start_split(sents)
+        split.start_split()
         if(st.button('开始翻译')):
             core.gpt_translator.start_translate()
             st.success('翻译完成')
