@@ -17,7 +17,7 @@ def prepare_spacy_model(lang):
     except:
         log_utils.warn(f"Model {model_name} not found, downloading...")
         spacy.cli.download(model_name)
-        nlp = spacy.load(model_name)    
+        nlp = spacy.load(model_name)
     return nlp
 
 def start_split(sents: list[str]):
@@ -34,7 +34,7 @@ def start_split(sents: list[str]):
     # for text in sents:
     #     t = split_comma.split_sent_by_comma(text, prepare_spacy_model(lang))
 
-    split_llm(sents, prepare_spacy_model(lang))
+    split_llm.split_by_llm(sents, prepare_spacy_model(lang))
 
 def get_joiner(lang):
     if lang in get_config_value('language_space_joiner'):

@@ -53,6 +53,8 @@ def main():
             if fname:
                 st.session_state.vid_file = fname
                 st.text_input('选择的文件：', fname)
+                video_data = open(fname, "rb").read()
+                st.video(video_data)
     else:
         col1, col2 = st.columns(2)
         url_input = st.text_input('输入视频URL')

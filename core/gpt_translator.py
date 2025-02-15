@@ -18,7 +18,7 @@ def pack_json_req(texts: list) -> str:
 def write_result(res: str) -> dict:
     obj = json_repair.repair_json(res, return_objects=True)
     lines = [obj[key]['revised_translation'] + '\n' for key in obj]
-    with open(TRANSLATE_LLM_PATH, 'a', encoding='utf-8') as f:
+    with open(TRANS_LLM_PATH, 'a', encoding='utf-8') as f:
         f.writelines(lines)
 
 def translate(pending_reqs: list) -> str:
@@ -26,7 +26,10 @@ def translate(pending_reqs: list) -> str:
     res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt())
     return res
 
-def start_translate(sents: tuple, num_threads=3, batch_size=8):
+def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
+    if sents == None:
+        with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
+            sents = f.readlines()
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         pending_reqs = []
         futures = []
@@ -46,4 +49,4 @@ def start_translate(sents: tuple, num_threads=3, batch_size=8):
 if __name__ == '__main__':
     with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
         sents = f.readlines()
-    start_translate(sents[0:4])
+    start_translate()

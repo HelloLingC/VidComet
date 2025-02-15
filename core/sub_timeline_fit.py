@@ -20,14 +20,22 @@ def format_time(seconds):
     return f"{hours:02}:{minutes:02}:{int(seconds):02},{milliseconds:03}"
 
 def generate_srt(subtitles: list):
+    original = ""
+    translation = ""
+    for i, (start_time, end_time, text, trans) in enumerate(subtitles, start=1):
+        # 写入序号
+        original += f"{i}\n"
+        translation += original
+        # 写入时间轴
+        original += f"{format_time(start_time)} --> {format_time(end_time)}\n"
+        translation += original
+        # 写入字幕文本
+        original += f"{text}\n\n"
+        translation += f"{trans}\n\n"
     with open(SRT_PATH, 'w', encoding='utf-8') as f:
-        for i, (start_time, end_time, text) in enumerate(subtitles, start=1):
-            # 写入序号
-            f.write(f"{i}\n")
-            # 写入时间轴
-            f.write(f"{format_time(start_time)} --> {format_time(end_time)}\n")
-            # 写入字幕文本
-            f.write(f"{text}\n\n")
+        f.write(original)
+    with open(SRT_TRANS_PATH, 'w', encoding='utf-8') as f:
+        f.write(translation)
 
 def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: list[float]):
     """
@@ -80,6 +88,8 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
 
 if __name__ == '__main__':
     with open(SPLIT_LLM_PATH, 'r') as f:
-        df_sents = f.readlines()
-    words = pd.read_csv(TRANSCRIPTION_PATH)
-    combine_sent_timestamp(words, df_sents)
+        sents = f.readlines()
+    with open(TRANS_LLM_PATH, 'r') as f:
+        t_sents = f.readlines()
+    df_words = pd.read_csv(TRANSCRIPTION_PATH)
+    combine_sent_timestamp(df_words, sents, t_sents)

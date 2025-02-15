@@ -17,13 +17,13 @@ CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 # Whisper transcription word by word
 TRANSCRIPTION_PATH = os.path.join(os.getcwd(), 'output', 'transcript.csv')
 # Whisper transcription but only sentences without timeline
-TRANSCRIPTION_SENT_PATH = os.path.join(os.getcwd(), 'output', 'transcript_sent.csv')
+TRANSCRIPTION_SENT_PATH = os.path.join(os.getcwd(), 'output', 'transcript_sent.txt')
 
 SPLIT_LLM_PATH = os.path.join(os.getcwd(), 'output', 'split_llm.txt')
-TRANSLATE_LLM_PATH = os.path.join(os.getcwd(), 'output', 'tranlated_llm.txt')
+TRANS_LLM_PATH = os.path.join(os.getcwd(), 'output', 'tranlated_llm.txt')
 
 SRT_PATH = os.path.join(os.getcwd(), 'output', 'srt.srt')
-SRT_TRANSLATION_PATH = os.path.join(os.getcwd(), 'output', 'srt_translation.srt')
+SRT_TRANS_PATH = os.path.join(os.getcwd(), 'output', 'srt_translation.srt')
 
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd

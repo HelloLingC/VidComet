@@ -34,21 +34,22 @@ def transcribe_segments(segments):
     texts = []
     result = []
     for start, end in segments:
-        log_utils.info(f"正在转录片段 从 {start} 到 {end} seconds")
+        log_utils.info(f"正在转录片段 从 {start} 到 {end} 秒")
         res = transcribe_audio(start, end)
         for segment in res['segments']:
             # transcribed text from Whisperx always with inappropriate quotes 
             text = segment['text'].strip("\"").strip(" ")
             # for sententces, we don't need timeline
             # texts.append({'start': segment['start'], 'end': segment['end'], 'text': text})
-            texts.append(text)
+            texts.append(text + '\n')
             # words prop is a word list
             result.extend(segment['words'])
     df = pd.DataFrame(result)
     df.to_csv(TRANSCRIPTION_PATH, index=False)
     with open(TRANSCRIPTION_SENT_PATH, 'w', encoding='utf-8') as f:
+        # writelines won't add a line seperator after each line
         f.writelines(texts)
-    
+
 # set compute_type to "int8" if on low gpu mem
 def transcribe_audio(start: float, end: float, device="cuda", compute_type='float16') -> dict:
     if(device == "cuda" and not torch.cuda.is_available()):
@@ -63,6 +64,7 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
         batch_size = 1
         compute_type = 'int8'
         log_utils.info(f'[CPU] Batch size: {batch_size}, [cyan]compute_type: {compute_type}[/cyan]')
+    log_utils.info('开始进行语音识别...')
     cfg_lang = get_config_value('whisper.language')
     model_arch = get_config_value('whisper.model')
     cfg_lang = 'auto'
@@ -91,6 +93,7 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # Align whisper output :)
     model_a, metadata = whisperx.load_align_model(language_code=result['language'], device=device)
     result = whisperx.align(result['segments'], model_a, metadata, segment, device, return_char_alignments=False)
+    log_utils.success('对齐成功！')
 
     gc.collect()
     del model_a

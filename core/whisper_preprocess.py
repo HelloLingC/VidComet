@@ -30,15 +30,16 @@ def enhance_vocals(vocals_ratio=2.50):
         return VOCAL_AUDIO_FILE_PATH  # Fallback to original vocals if enhancement fails
 
 def compress_audio(input: str, output: str = COMPRESSED_AUDIO_PATH):
-    if not os.path.exists(output):
-        log_utils.info(f"正在压缩音频文件...")
-        # 16000 Hz, 1 channel, (Whisper default) , 96kbps to keep more details as well as smaller file size
-        subprocess.run([
-            'ffmpeg', '-y', '-i', input, '-vn', '-b:a', '96k',
-            '-ar', '16000', '-ac', '1', '-metadata', 'encoding=UTF-8',
-            '-f', 'mp3', output
-        ], check=True, stderr=subprocess.PIPE)
-        log_utils.info("压缩成功！")
+    if os.path.exists(output):
+        log_utils.warn('压缩音频已存在, 覆盖文件')
+    log_utils.info(f"正在压缩音频文件...")
+    # 16000 Hz, 1 channel, (Whisper default) , 96kbps to keep more details as well as smaller file size
+    subprocess.run([
+        'ffmpeg', '-y', '-i', input, '-vn', '-b:a', '96k',
+        '-ar', '16000', '-ac', '1', '-metadata', 'encoding=UTF-8',
+        '-f', 'mp3', output
+    ], check=True, stderr=subprocess.PIPE)
+    log_utils.info("压缩成功！")
     return output
 
 def silence_detect(audio_file, start:float, end:float)->list[float]:
@@ -94,8 +95,8 @@ def split_audio(audio_file: str, frag_len:int=30*60, window: int=60) -> list[tup
                 continue
         segments.append((pos, pos + frag_len))
         pos += frag_len
-    
-    log_utils.info(f"Audio has been split into {len(segments)} segments")
+    # Audio has been split into {} segments
+    log_utils.info(f"音频已被切分为 {len(segments)} 个片段")
     return segments
 
 if __name__ == "__main__":

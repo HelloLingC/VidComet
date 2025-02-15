@@ -12,7 +12,7 @@ def send_request(req):
     if resp == None:
         # 如果LLM请求失败
         resp = req
-    print('Catch Splitter LLM Response!')
+    # print('Catch Splitter LLM Response!')
     resp = resp.replace('<br>', '\n')
     resp = resp.replace('.', '\n')
     return resp
