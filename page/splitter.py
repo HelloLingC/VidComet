@@ -3,6 +3,7 @@ import core.config_utils as cfg
 import core.split_main as split
 import core.gpt_translator
 import core.log_utils
+import core.sub_timeline_fit
 
 log_placeholder = None
 msg_arr = ''
@@ -23,6 +24,12 @@ def main():
         if(st.button('开始翻译')):
             core.gpt_translator.start_translate()
             st.success('翻译完成')
+    if(st.button('开始翻译')):
+        core.gpt_translator.start_translate()
+        st.success('翻译完成')
+    if(st.button('双语字幕生成')):
+        core.sub_timeline_fit.start()
+        st.success('完成')
     if not 'step' in st.session_state or st.session_state.step != 3:
         st.warning('请先完成前一步骤')
         return
