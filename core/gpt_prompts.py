@@ -31,7 +31,38 @@ the upgraded claude sonnet is now available for all users developers can build w
     return split_prompt
 
 def get_summary_prompt():
-    pass
+    prompt = """
+You are a professional video analyst, skilled in accurately extracting information from video subtitles, including main content and key terms.
+
+## Your Tasks
+
+1. Summarize Video Content
+- Identify the type of video and explain the key points to pay attention to during translation based on the specific video content.
+- Provide a detailed summary: Offer a comprehensive explanation of the video content.
+
+2. Extract All Key Terms
+- Extract all important nouns and phrases (no need to translate). You need to identify and correct any misrecognized words, handling and rectifying errors in names or terms caused by homophones or similar tones.
+
+## Output Format
+
+Return the results in JSON format, using the original subtitle language. For example, if the original subtitle is in English, the returned results should also be in English.
+
+The JSON should include two fields: `summary` and `terms`
+
+Example:
+{
+  "summary": "video summary",
+  "terms": [
+    {
+      "src": "original term",
+      "tgt": "translation of term",
+      "note": "Brief explanation"
+    },
+    ...
+  ]
+}
+    """
+    return prompt.strip()
 
 def get_translation_prompt():
     TARGET_LANGUAGE = get_config_value("translator.target")

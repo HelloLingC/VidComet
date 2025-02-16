@@ -15,6 +15,7 @@ WHISPER_MODEL_DIR = os.path.join(os.getcwd(), 'models')
 
 CONFIG_FILE_PATH = os.path.join(os.getcwd(),"config.yaml")
 
+SUMMARY_PATH = os.path.join(os.getcwd(), 'output', 'summary.json')
 # Whisper transcription word by word
 TRANSCRIPTION_PATH = os.path.join(os.getcwd(), 'output', 'transcript.csv')
 # Whisper transcription but only sentences without timeline

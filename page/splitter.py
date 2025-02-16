@@ -12,6 +12,7 @@ def update(msg: str):
     log_placeholder.status(msg)
 
 def main():
+    sys.path.append(os.getcwd() +'/core')
     global log_placeholder
     st.header('字幕 Subtitle')
 
