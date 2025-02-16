@@ -20,7 +20,7 @@ class SplitterLLM:
         resp = resp.replace('<br>', '\n')
         resp = resp.replace('.', '\n')
         for i in unchanged_indexs:
-            resp = f'{self.sents[i]}\n{resp}'
+            resp = f'{self.sents[i]}{resp}'
         return resp
 
     def split(self, sents: list[str], num_threads: int=3, batch_size: int=5):

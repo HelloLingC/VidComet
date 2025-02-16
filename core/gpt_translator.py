@@ -27,6 +27,9 @@ def translate(pending_reqs: list) -> str:
     return res
 
 def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
+    if os.path.exists(TRANS_LLM_PATH):
+        log_utils.warn('Deleted existed translation file.')
+        os.remove(TRANS_LLM_PATH)
     if sents == None:
         with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
             sents = f.readlines()
@@ -47,6 +50,4 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
             write_result(result)
 
 if __name__ == '__main__':
-    with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
-        sents = f.readlines()
     start_translate()

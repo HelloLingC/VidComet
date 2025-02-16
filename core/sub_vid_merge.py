@@ -24,8 +24,7 @@ TRANS_OUTLINE_COLOR = '&H000000'
 TRANS_OUTLINE_WIDTH = 1
 TRANS_BACK_COLOR = '&H33000000'
 
-OUTPUT_DIR = "output"
-OUTPUT_VIDEO = f"{cfg.AUDIO_DIR}\\output_sub.mp4"
+OUTPUT_VIDEO = os.path.join(cfg.OUTPUT_DIR, "output.mp4")
 SRC_SRT = cfg.SRT_PATH
 TRANS_SRT = cfg.SRT_TRANS_PATH
 
@@ -85,7 +84,7 @@ def merge_subtitles_to_video():
         ffmpeg_cmd.extend(['-c:v', 'h264_nvenc'])
     else:
         rprint("[bold yellow]No NVIDIA GPU encoder detected, will use CPU instead.[/bold yellow]")
-    
+
     ffmpeg_cmd.extend(['-y', OUTPUT_VIDEO])
 
     print("🎬 Start merging subtitles to video...")

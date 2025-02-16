@@ -40,11 +40,12 @@ with col1.expander('FFmpeg', True):
     # Todo
     if ver != None:
         st.text('版本：' + str(ver))
+        st.checkbox('nvenc加速')
+    else:
+        st.error('未找到FFmpeg')
 
 with col1.expander('Demucs 设置', True):
-    # Pre-trained model
-    st.selectbox('模型', ['htdemucs', 'htdemucs-ft', 'htdemucs_6s', 'mdx_extra_q'])
-
+    pass
 with col2.expander('WhisperX 设置', True):
     st.selectbox('目标语言', ['auto', 'zh', 'en', 'jp'])
     st.selectbox('模型', ['Whisper-large-v3-turbo', 'Whisper-large-v3', 'Belle-whisper-large-v3-zh', 'Huan69/Belle-whisper-large-v3-zh-punct-fasterwhisper'])

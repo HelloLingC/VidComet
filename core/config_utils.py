@@ -2,7 +2,8 @@ import ruamel.yaml
 import os
 import log_utils
 
-AUDIO_DIR = os.path.join(os.getcwd(), 'output', 'audio')
+OUTPUT_DIR = os.path.join(os.getcwd(),'output')
+AUDIO_DIR = os.path.join(OUTPUT_DIR, 'audio')
 RAW_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'raw.mp3')
 VOCAL_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'htdemucs', 'raw', 'vocals.mp3')
 BACKGROUND_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'no-vocals.mp3')
@@ -24,6 +25,8 @@ TRANS_LLM_PATH = os.path.join(os.getcwd(), 'output', 'tranlated_llm.txt')
 
 SRT_PATH = os.path.join(os.getcwd(), 'output', 'srt.srt')
 SRT_TRANS_PATH = os.path.join(os.getcwd(), 'output', 'srt_translation.srt')
+
+OUTPUT_VIDEO = os.path.join(OUTPUT_DIR, 'output.mp4')
 
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd

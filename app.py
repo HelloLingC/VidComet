@@ -24,10 +24,11 @@ def main():
     st.sidebar.header('导航栏')
     
     p1 = st.Page('page/home.py', title='开始')
-    p2 = st.Page('page/preprocess.py', title='预处理和转录')
-    p3 = st.Page('page/splitter.py', title='字幕整理')
+    p2 = st.Page('page/transcribe.py', title='预处理和转录')
+    p3 = st.Page('page/splitter.py', title='字幕生成和翻译')
+    p4 = st.Page('page/video_preview.py', title='视频预览')
     settings = st.Page('page/settings.py', title='设置')
-    pg = st.navigation([p1, p2, p3, settings])
+    pg = st.navigation([p1, p2, p3, p4, settings])
     pg.run()
 
 if __name__ == '__main__':

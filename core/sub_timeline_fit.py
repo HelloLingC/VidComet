@@ -1,6 +1,7 @@
 import log_utils
 import pandas as pd
 from config_utils import *
+import re
 
 INPUT_FILE = ''
 OUTPUT_SRT_FILE = ''
@@ -9,7 +10,10 @@ def _trim(s: str):
     """Delete all space str and dot punct"""
     # i dont know why, but replace func cannot remove space in
     # the sentence end, so need strip()
-    return s.replace(' ', '').replace('.', '').replace(',', '').strip()
+    # s = re.sub(r'\s+', ' ', s)
+    # s = re.sub(r'[^\w\s]', '', s)
+    # return s
+    return s.replace(' ', '').replace('.', '').replace(',', '').replace('\"', '').replace('\n', '')
 
 def format_time(seconds):
     """将秒数转换为SRT时间格式"""
@@ -52,7 +56,6 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         word = _trim(word['word'])
         word_pos_index[len(all_words_str)] = i
         all_words_str += word
-    print(word_pos_index)
 
     timestamp_list = []
     current_pos = 0
@@ -81,7 +84,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
                     sent,
                     t_sents[i] if t_sents else None
                 ))
-                
+
                 current_pos += sent_len
                 matched = True
                 break
@@ -89,7 +92,8 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
             # print("allwords: " + all_words_str[current_pos:current_pos+sent_len])
             current_pos += 1
         if not matched:
-            log_utils.error('No match for sentence: ' + sent)
+            print(cleared_sent)
+            log_utils.error('No match for sentence: ' + cleared_sent)
 
     generate_srt(timestamp_list)
 

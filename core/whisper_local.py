@@ -8,8 +8,7 @@ import whisper_preprocess as preprocess
 import shlex
 # import librosa
 import core.whisper_preprocess as whisper_preprocess
-import demucs_local
-import json
+import sys
 import pandas as pd
 
 options_model = ["large-v3"]
@@ -19,7 +18,7 @@ def transcribe(vid_file):
     # 0 音频轨道分离
     preprocess.convert_to_audio(vid_file)
     # 1 人声分离
-    demucs_local.start_demucs()
+    # demucs_local.start_demucs()
     # 2 人声增强
     enhanced = preprocess.enhance_vocals()
     # 3 音频压缩
@@ -80,9 +79,10 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
 
     # segment, sample_rate = librosa.load(SEGMENT_TEMP_PATH, sr=16000)
     segment = whisperx.load_audio(SEGMENT_TEMP_PATH, 16000)
+
     result = model.transcribe(segment, batch_size, print_progress=True)
     log_utils.success('🎉转录成功！')
-    
+
     set_config_value('whisper.detected_language', result['language'])
 
     os.unlink(SEGMENT_TEMP_PATH)
@@ -104,3 +104,6 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # However, in fact, the segments are processed in order.
     
     return result
+
+if __name__ == '__main__':
+    transcribe(sys.argv[1])
