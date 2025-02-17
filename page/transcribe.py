@@ -20,7 +20,7 @@ st_trans_progress = None
 def update(msg):
     if st.session_state.state == core.CurrentState.VOCAL_SEPERATING:
         st_progress.status(msg)
-    else:
+    elif st.session_state.state == core.CurrentState.TRANSCRIBING:
         st_trans_progress.status(msg)
 
 def check_whisper_models():

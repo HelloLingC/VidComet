@@ -2,6 +2,7 @@ import config_utils as cfg
 import gpt_openai
 import gpt_prompts
 import os
+import json_repair
 
 def start_summary():
     if(not os.path.exists(cfg.TRANSCRIPTION_SENT_PATH)):
@@ -9,7 +10,8 @@ def start_summary():
         return
     with open(cfg.TRANSCRIPTION_SENT_PATH, 'r', encoding='utf-8') as f:
         sents = f.readlines()
-        res = gpt_openai.ask_gpt("".join(sents), gpt_prompts.get_summary_prompt(), response_json=True)
+        res = gpt_openai.ask_gpt("".join(sents), gpt_prompts.get_summary_prompt())
+        res = json_repair.repair_json(res)
         with open(cfg.SUMMARY_PATH, 'w', encoding='utf-8') as f:
             f.write(res)
 

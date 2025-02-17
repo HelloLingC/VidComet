@@ -5,6 +5,7 @@ from . import config_utils as cfg
 
 from enum import Enum
 class CurrentState(Enum):
+    IDLE = 0
     VOCAL_SEPERATING = 1
     TRANSCRIBING = 2
 

@@ -9,6 +9,8 @@ from config_utils import *
 在splir_llm后, 根据LLM切分的字幕进行翻译
 """
 
+conversation_history = []
+
 def pack_json_req(texts: list) -> str:
     reqs = {}
     for i, text in enumerate(texts, start=1):
@@ -22,8 +24,17 @@ def write_result(res: str) -> dict:
         f.writelines(lines)
 
 def translate(pending_reqs: list) -> str:
+    global conversation_history
+    if len(conversation_history) > 5:
+        conversation_history = conversation_history[-5:]
+
     chunk = pack_json_req(pending_reqs)
-    res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt())
+    conversation_history.append({'role': 'user', 'content': chunk})
+    res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt(), conversation_history=conversation_history)
+    if res != None:
+        conversation_history.append({'role': 'assistant', 'content': res})
+    else:
+        conversation_history.pop()
     return res
 
 def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
