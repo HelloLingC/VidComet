@@ -43,7 +43,7 @@ def success(v):
     logger.info(f':green[{v}]')
 
 def warn(v):
-    logger.info(f':yellow[{v}]')
+    print(v)
 
 def error(v):
     logger.info(f':red[{v}]')

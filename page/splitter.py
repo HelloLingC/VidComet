@@ -1,10 +1,10 @@
 import streamlit as st
 import sys, os
 sys.path.append(os.getcwd() +'/core')
-import core.config_utils as cfg
+from core import config_utils as cfg
 import core.split_main
 import core.gpt_translator
-import core.log_utils
+from core import log_utils
 import core.sub_timeline_fit
 
 log_placeholder = None

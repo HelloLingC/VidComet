@@ -4,29 +4,12 @@ import gc
 import log_utils
 from config_utils import *
 import subprocess
-import whisper_preprocess as preprocess
 import shlex
 # import librosa
-import core.whisper_preprocess as whisper_preprocess
 import sys
 import pandas as pd
 
 options_model = ["large-v3"]
-
-# Preprocess video and transcribe audio via WhisperX
-def transcribe(vid_file):
-    # 0 音频轨道分离
-    preprocess.convert_to_audio(vid_file)
-    # 1 人声分离
-    # demucs_local.start_demucs()
-    # 2 人声增强
-    enhanced = preprocess.enhance_vocals()
-    # 3 音频压缩
-    preprocess.compress_audio(enhanced)
-    # 4 音频切分
-    segments = whisper_preprocess.split_audio(COMPRESSED_AUDIO_PATH)
-    # whisper转录
-    transcribe_segments(segments)
 
 """transcribe audio segememts one by one"""
 def transcribe_segments(segments):
@@ -104,6 +87,3 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # However, in fact, the segments are processed in order.
     
     return result
-
-if __name__ == '__main__':
-    transcribe(sys.argv[1])

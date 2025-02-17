@@ -15,7 +15,7 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, response_js
     if not api_key:
         log_utils.error("API key is not set!")
         return None
-    
+
     client = OpenAI(api_key=api_key, base_url=api_url, max_retries=3)
     try:
         response = client.chat.completions.create(

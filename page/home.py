@@ -1,5 +1,4 @@
 import streamlit as st
-from core import ytp
 import tkinter as tk
 from tkinter import filedialog
 
@@ -15,7 +14,7 @@ def start_via_url(url, res):
     if(url == ""):
         st.error("请输入视频URL！")
         return
-    ytp.download(url, res=res)
+    # ytp.download(url, res=res)
 
 css = '''
 <style>
@@ -34,7 +33,7 @@ def main():
     # Set up tkinter
     root = tk.Tk()
     root.withdraw()
-    
+
     # Make folder picker dialog appear on top of other windows
     root.wm_attributes('-topmost', 1)
 
@@ -43,8 +42,9 @@ def main():
     # st.image('icon.png')
     st.markdown(css, unsafe_allow_html=True)
     st.title('SubtitleComet')
-    input_mode = st.selectbox('选择视频输入源：', options_input_mode)
-    if input_mode == options_input_mode[0]:
+
+    tab = st.tabs(['本地文件', '远程文件流'])
+    with tab[0]:
         uploaded_file = st.file_uploader("上传视频", type=["mp4", "avi", "mov", "mkv"])
         if st.button('选择本地视频'):
             fname = str(filedialog.askopenfilename(master=root))
@@ -55,27 +55,26 @@ def main():
                 st.text_input('选择的文件：', fname)
                 video_data = open(fname, "rb").read()
                 st.video(video_data)
-    else:
+         # start_via_file(uploaded_file)
+                st.spinner('正在处理...')
+        if st.button('开始下一步', icon='🚀'):
+            st.switch_page('page/transcribe.py')
+
+    with tab[1]:
         col1, col2 = st.columns(2)
         url_input = st.text_input('输入视频URL')
         res = col1.selectbox('视频分辨率', options_download_res)
         col2.text_input('Cookies')
-    if(st.button('下一步', icon='🚀')):
-        fname = st.session_state.vid_file
-        if uploaded_file is None and fname is None:
-                st.error("请上传视频文件！")
-                return
-        if input_mode == options_input_mode[0]:
-            # start_via_file(uploaded_file)
-            st.spinner('正在处理...')
-            st.session_state.file_path = fname
-            st.switch_page('page/transcribe.py')
-        else:
+        if(st.button('下一步', icon='🚀')):
+            fname = st.session_state.vid_file
+            if uploaded_file is None and fname is None:
+                    st.error("请上传视频文件！")
+                    return
             st.spinner('正在下载...')
             start_via_url(url_input, res)
             
     # 提前的导入下一页面的whisperx包，防止下一页空白期过久
     # (足足有7秒)
     __import__('whisperx')
- 
+
 main()
