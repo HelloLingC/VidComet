@@ -2,6 +2,7 @@ import log_utils
 import pandas as pd
 from config_utils import *
 import re
+from difflib import SequenceMatcher
 
 INPUT_FILE = ''
 OUTPUT_SRT_FILE = ''
@@ -70,7 +71,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         # make current_pos alwuys be right pos for next sentence
         while current_pos < len(all_words_str) - sent_len + 1:
             # print('current_pos: ' + all_words_str[current_pos:current_pos+sent_len])
-            if all_words_str[current_pos:current_pos+sent_len] == cleared_sent:
+            if SequenceMatcher(None, all_words_str[current_pos:current_pos+sent_len], cleared_sent).ratio() > 0.85:
                 start_word_idx = word_pos_index[current_pos]
                 # 'end_word_idx' point to the first word in the next sentence
                 # so at the final sentence of text, end_word_idex point to None
