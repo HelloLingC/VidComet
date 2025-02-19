@@ -1,15 +1,15 @@
 import concurrent.futures
 import math
 from config_utils import *
-import split_main
+import log_utils
 import gpt_openai
 import gpt_prompts
-import os
 
 class SplitterLLM:
     def __init__(self, nlp):
         self.sents: list[str] = None
         self.nlp = nlp
+        self.handled_batch_num = 0
 
     def send_request(self, req, part_num, unchanged_indexs):
         resp = gpt_openai.ask_gpt(f"{req}", gpt_prompts.get_split_prompt(10))
@@ -44,6 +44,8 @@ class SplitterLLM:
                     part_num = math.ceil(word_count / word_limit)
                     pending_req.append(sent)
                     if len(pending_req) >= batch_size:
+                        self.handled_batch_num += 1
+                        log_utils.info(f'{self.handled_batch_num} Batch: Splitting {len(pending_req)} sentences...')
                         future = executor.submit(self.send_request, pending_req, part_num, unchanged_indexs)
                         futures.append(future)
                         pending_req = []

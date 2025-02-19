@@ -11,18 +11,20 @@ def parse_res(res):
     else:
         return f"res:{res.replace('p', '')}"
 
-def download(url, res, output_path=saved_path):
+def download(url, res, cookie_file=None):
     parsed_res = parse_res(res)
-    print(parsed_res)
-    print(url)
-    print(output_path)
+    # Make sure -S is after -o
+    cmd = ['yt-dlp', "-o", f"{saved_path}", "--cookies", f"{cookie_file}"
+            , "-S", f"{parsed_res}", f'{url}']
+
+     # Add cookies option only if file exists
+    if cookie_file and os.path.exists(cookie_file):
+        cmd.extend(["--cookies", cookie_file])
+    cmd.append(url)  # Add URL at the end
+
     try:
-        # Make sure -S is after -o
-        cmd = ['yt-dlp', "-o", f"{output_path}"
-               , "-S", f"{parsed_res}", f'{url}']
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         print(result.stdout)
     except subprocess.CalledProcessError as e:
         print(f"Command failed with return code {e.returncode}")
         print(f"Error output: {e.stderr}")
-    

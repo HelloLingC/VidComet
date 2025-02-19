@@ -23,8 +23,9 @@ def prepare_spacy_model(lang):
 def start_split(sents: list[str]=None):
     if env_check.is_gpu_available():
         spacy.prefer_gpu()
+        log_utils.info("Using GPU for LLM splitting.")
     else:
-        log_utils.warn("GPU not available, using CPU.")
+        log_utils.info("GPU not available, using CPU.")
 
     lang = get_config_value('whisper.language')
     # if whisper.language set auto

@@ -1,25 +1,15 @@
 import streamlit as st
 import tkinter as tk
 from tkinter import filedialog
+from crawl import ytp
 
 options_input_mode = ['本地文件', '远程文件流']
 options_download_res = ['最高画质', '1080p', '720p', '480p', '360p']
 
-def start_via_file(file):
-    if(file is None):
-        
-        return
-
-def start_via_url(url, res):
-    if(url == ""):
-        st.error("请输入视频URL！")
-        return
-    # ytp.download(url, res=res)
-
 css = '''
 <style>
 #subtitlecomet {
-    background: linear-gradient(90deg, #ff7e5f, #feb47b); 
+    background: linear-gradient(90deg, #ff7e5f, #feb47b);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -64,15 +54,15 @@ def main():
         col1, col2 = st.columns(2)
         url_input = st.text_input('输入视频URL')
         res = col1.selectbox('视频分辨率', options_download_res)
-        col2.text_input('Cookies')
+        cookies_file = col2.text_input('Cookies File Path')
         if(st.button('下一步', icon='🚀')):
-            fname = st.session_state.vid_file
-            if uploaded_file is None and fname is None:
-                    st.error("请上传视频文件！")
-                    return
             st.spinner('正在下载...')
-            start_via_url(url_input, res)
-            
+            if(url_input == ""):
+                st.error("请输入视频URL！")
+                return
+            ytp.download(url_input, res, cookie_file=cookies_file)
+            st.success("finished")
+
     # 提前的导入下一页面的whisperx包，防止下一页空白期过久
     # (足足有7秒)
     __import__('whisperx')

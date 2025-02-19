@@ -4,11 +4,12 @@ import gpt_prompts
 import json
 import json_repair
 from config_utils import *
+import log_utils
 
 """
 在splir_llm后, 根据LLM切分的字幕进行翻译
 """
-
+handled_batch_num = 0
 conversation_history = []
 
 def pack_json_req(texts: list) -> str:
@@ -25,8 +26,8 @@ def write_result(res: str) -> dict:
 
 def translate(pending_reqs: list) -> str:
     global conversation_history
-    if len(conversation_history) > 5:
-        conversation_history = conversation_history[-5:]
+    if len(conversation_history) > 4:
+        conversation_history = conversation_history[-4:]
 
     chunk = pack_json_req(pending_reqs)
     conversation_history.append({'role': 'user', 'content': chunk})
@@ -52,6 +53,8 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
             sent = sent.replace('\n', '')
             pending_reqs.append(sent)
             if len(pending_reqs) >= batch_size:
+                handled_batch_num += 1
+                log_utils.info(f'{handled_batch_num} Batch: Translating {len(pending_reqs)} sentences...')
                 futures.append(executor.submit(translate, pending_reqs))
                 pending_reqs = []
         if pending_reqs:

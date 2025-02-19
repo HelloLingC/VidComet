@@ -8,6 +8,9 @@ class CurrentState(Enum):
     IDLE = 0
     VOCAL_SEPERATING = 1
     TRANSCRIBING = 2
+    LLM_SPILITTING = 3
+    TRANSLATING = 4
+    SUBTITLE_MERGING = 5
 
 def start_vocal_seperation(vid_path: str):
     """音频轨道分离 and vocal seperation"""
