@@ -27,7 +27,6 @@ def main():
     # Make folder picker dialog appear on top of other windows
     root.wm_attributes('-topmost', 1)
 
-    # cst.change(language='cn')
     # st.sidebar.header('Left')
     # st.image('icon.png')
     st.markdown(css, unsafe_allow_html=True)
@@ -45,7 +44,6 @@ def main():
                 st.text_input('选择的文件：', fname)
                 video_data = open(fname, "rb").read()
                 st.video(video_data)
-         # start_via_file(uploaded_file)
                 st.spinner('正在处理...')
         if st.button('开始下一步', icon='🚀'):
             st.switch_page('page/transcribe.py')

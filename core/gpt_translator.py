@@ -13,6 +13,13 @@ handled_batch_num = 0
 conversation_history = []
 
 def pack_json_req(texts: list) -> str:
+    """
+    Packs a list of text strings into a JSON format with numbered keys.
+    Args:
+        texts (list): List of text strings to be packed into JSON
+    Returns:
+        str: JSON string with numbered keys (1-based) mapping to text values
+    """
     reqs = {}
     for i, text in enumerate(texts, start=1):
         reqs[str(i)] = text
@@ -45,6 +52,8 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
     if sents == None:
         with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
             sents = f.readlines()
+    import gpt_summary
+    gpt_summary.start_summary()
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         pending_reqs = []
         futures = []

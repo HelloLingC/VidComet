@@ -49,7 +49,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
     t_sents: The translation of sentences (if have).
     """
     all_words_str = ''
-    word_pos_index = {}
+    word_pos_index: dict[int, int] = {}
     # Build index for word query
     # the dict's key is added by each str's length
     # the value is the index of the word in df_words
@@ -71,6 +71,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         # make current_pos alwuys be right pos for next sentence
         while current_pos < len(all_words_str) - sent_len + 1:
             # print('current_pos: ' + all_words_str[current_pos:current_pos+sent_len])
+            # using relevance matching... Sometimes the word is not exactly the same due to LLM splitter
             if SequenceMatcher(None, all_words_str[current_pos:current_pos+sent_len], cleared_sent).ratio() > 0.85:
                 start_word_idx = word_pos_index[current_pos]
                 # 'end_word_idx' point to the first word in the next sentence
@@ -98,13 +99,19 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
 
     generate_srt(timestamp_list)
 
-def start():
-    with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
-        sents = f.readlines()
-    with open(TRANS_LLM_PATH, 'r', encoding='utf-8') as f:
-        t_sents = f.readlines()
-    df_words = pd.read_csv(TRANSCRIPTION_PATH)
-    combine_sent_timestamp(df_words, sents, t_sents)
+def start() -> None:
+    """Main entry point to process subtitle alignment."""
+    try:
+        with open(SPLIT_LLM_PATH, 'r', encoding='utf-8') as f:
+            sents = [line.strip() for line in f.readlines()]
+        with open(TRANS_LLM_PATH, 'r', encoding='utf-8') as f:
+            t_sents = [line.strip() for line in f.readlines()]
+        df_words = pd.read_csv(TRANSCRIPTION_PATH)
+        combine_sent_timestamp(df_words, sents, t_sents)
+    except FileNotFoundError as e:
+        log_utils.error(f'Required input file not found: {str(e)}')
+    except Exception as e:
+        log_utils.error(f'Unexpected error during processing: {str(e)}')
 
 if __name__ == '__main__':
     start()
