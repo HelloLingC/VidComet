@@ -13,10 +13,11 @@ class SplitterLLM:
 
     def send_request(self, req, part_num, unchanged_indexs):
         resp = gpt_openai.ask_gpt(f"{req}", gpt_prompts.get_split_prompt(10))
+        # LLM request failed
         if resp == None:
-            # 如果LLM请求失败
-            resp = req
-        # print('Catch Splitter LLM Response!')
+            print('Something wrong when asking gpt')
+            resp == req
+        print('Catch Splitter LLM Response for a batch!')
         resp = resp.replace('<br>', '\n')
         resp = resp.replace('.', '\n')
         for i in unchanged_indexs:

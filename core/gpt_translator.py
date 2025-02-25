@@ -26,6 +26,9 @@ def pack_json_req(texts: list) -> str:
     return json.dumps(reqs)
 
 def write_result(res: str) -> dict:
+    # Something wrong when asking gpt
+    if(res == None):
+        return
     obj = json_repair.repair_json(res, return_objects=True)
     lines = [obj[key]['revised_translation'] + '\n' for key in obj]
     with open(TRANS_LLM_PATH, 'a', encoding='utf-8') as f:
@@ -33,8 +36,8 @@ def write_result(res: str) -> dict:
 
 def translate(pending_reqs: list) -> str:
     global conversation_history
-    if len(conversation_history) > 4:
-        conversation_history = conversation_history[-4:]
+    if len(conversation_history) > 2:
+        conversation_history = conversation_history[-2:]
 
     chunk = pack_json_req(pending_reqs)
     conversation_history.append({'role': 'user', 'content': chunk})
@@ -57,6 +60,7 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         pending_reqs = []
         futures = []
+        handled_batch_num = 0
         for i, sent in enumerate(sents):
             # 每条句子总是以\n结尾
             sent = sent.replace('\n', '')

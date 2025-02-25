@@ -28,7 +28,6 @@ def chunk_text(text: str, max_tokens: int = 3000) -> List[str]:
     return chunks
 
 def start_summary():
-    # ... existing code ...
     with open(cfg.TRANSCRIPTION_SENT_PATH, 'r', encoding='utf-8') as f:
         text = f.read()
         
@@ -38,10 +37,15 @@ def start_summary():
         # Get summary for each chunk
         chunk_summaries = []
         for chunk in chunks:
-            summary = gpt_openai.ask_gpt(chunk, gpt_prompts.get_summary_prompt())
+            tgt = cfg.get_config_value('translator.target')
+            summary = gpt_openai.ask_gpt(chunk, gpt_prompts.get_summary_prompt(tgt))
+            if summary == None:
+                print('error when generating summary')
+                chunk_summaries.append("Error None")
+                return
             summary = json_repair.repair_json(summary)
             chunk_summaries.append(summary)
-        
+
         # If we have multiple chunks, combine them with a final summary
         if len(chunk_summaries) > 1:
             combined_summary = gpt_openai.ask_gpt(
@@ -51,11 +55,9 @@ def start_summary():
             final_summary = json_repair.repair_json(combined_summary)
         else:
             final_summary = chunk_summaries[0]
-            
+
         with open(cfg.SUMMARY_PATH, 'w', encoding='utf-8') as f:
             f.write(final_summary)
-
-# ... existing code ...
 
 if __name__ == '__main__':
     start_summary()

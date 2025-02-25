@@ -13,10 +13,13 @@ subtitles_status = None
 def update(msg: str):
     if st.session_state.state == core.CurrentState.LLM_SPILITTING:
         split_status.status(msg)
+        return
     elif st.session_state.state == core.CurrentState.TRANSLATING:
         translate_status.status(msg)
+        return
     elif st.session_state.state == core.CurrentState.SUBTITLE_MERGING:
         subtitles_status.status(msg)
+        return
 
 def main():
     global split_status, translate_status, subtitles_status
@@ -49,6 +52,7 @@ def main():
         translate_status = st.empty()
         if(st.button('开始翻译')):
             st.session_state.state = core.CurrentState.TRANSLATING
+            update('翻译中...')
             core.gpt_translator.start_translate()
             translate_status.status('翻译完成', state='complete')
 

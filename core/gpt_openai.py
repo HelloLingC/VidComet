@@ -20,9 +20,10 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, conversatio
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
-
-    if conversation_history:
-        messages = conversation_history.extend(messages)
+    # Todo: fix conversation history
+    # print(conversation_history)
+    # if conversation_history:
+    #     messages = conversation_history.extend(messages)
 
     client = OpenAI(api_key=api_key, base_url=api_url, max_retries=3)
     try:
@@ -32,7 +33,8 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, conversatio
         )
         resp = response.choices[0].message.content
     except Exception as e:
-        log_utils.error(f"Error while asking GPT: {e}")
+        print(f"Error while asking GPT: {e}")
+        #log_utils.error(f"Error while asking GPT: {e}")
         return None
 
     return resp

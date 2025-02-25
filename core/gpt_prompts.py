@@ -30,7 +30,8 @@ the upgraded claude sonnet is now available for all users developers can build w
 """.strip()
     return split_prompt
 
-def get_summary_prompt():
+def get_summary_prompt(tgt_lang):
+    # tgt_lang: summary in target language
     prompt = """
 You are a professional video analyst, skilled in accurately extracting information from video subtitles, including main content and key terms.
 
@@ -38,7 +39,7 @@ You are a professional video analyst, skilled in accurately extracting informati
 
 1. Summarize Video Content
 - Identify the type of video and explain the key points to pay attention to during translation based on the specific video content.
-- Provide a detailed summary: Offer a comprehensive explanation of the video content.
+- Provide a detailed summary in ${tgt_lang}: Offer a comprehensive explanation of the video content.
 
 2. Extract All Key Terms
 - Extract all important nouns and phrases (no need to translate). You need to identify and correct any misrecognized words, handling and rectifying errors in names or terms caused by homophones or similar tones.
@@ -62,7 +63,7 @@ Example:
   ]
 }
     """
-    return prompt.strip()
+    return Template(prompt.strip()).substitute(tgt_lang=tgt_lang)
 
 def get_translation_prompt():
     TARGET_LANGUAGE = get_config_value("translator.target")

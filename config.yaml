@@ -5,7 +5,7 @@ gpt:
 
 whisper:
   language: auto
-  detected_language: en
+  detected_language: en # this value is auto generating
   model: large-v2
   mode: local
 

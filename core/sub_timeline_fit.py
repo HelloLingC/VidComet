@@ -65,6 +65,11 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         cleared_sent = _trim(sent)
         sent_len = len(cleared_sent)
 
+        # Sometimes, split_by_LLM will contain empty line
+        # And gpt_translator wont fix that
+        if cleared_sent == '':
+            continue
+
         # NOTICE: words table from whisper contain punct
         # But after LLM translation, it may disappear (like ',')
         # so the 'current_pos++' in this iteration end
