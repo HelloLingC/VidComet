@@ -1,6 +1,6 @@
 import os, subprocess, time, sys
 from rich import print as rprint
-import config_utils as cfg
+import utils.config_utils as cfg
 import cv2
 import numpy as np
 import platform

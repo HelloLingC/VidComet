@@ -2,7 +2,7 @@ import whisperx
 import torch
 import gc
 import log_utils
-from config_utils import *
+from utils.config_utils import *
 import subprocess
 import shlex
 # import librosa

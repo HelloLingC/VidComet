@@ -1,4 +1,4 @@
-from config_utils import *
+from utils.config_utils import *
 import json
 from string import Template
 

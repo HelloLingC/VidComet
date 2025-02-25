@@ -1,6 +1,6 @@
 import log_utils
 import pandas as pd
-from config_utils import *
+from utils.config_utils import *
 import re
 from difflib import SequenceMatcher
 

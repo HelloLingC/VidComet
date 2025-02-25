@@ -1,7 +1,7 @@
 import streamlit as st
 import torch
 from core import env_check
-from core.config_utils import *
+from utils.config_utils import *
 
 st.markdown(
     """

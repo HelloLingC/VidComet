@@ -1,6 +1,6 @@
 import concurrent.futures
 import math
-from config_utils import *
+from utils.config_utils import *
 import log_utils
 import gpt_openai
 import gpt_prompts

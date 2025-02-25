@@ -1,7 +1,7 @@
 from . import whisper_preprocess as preprocess
 from . import demucs_local
 from . import whisper_local
-from . import config_utils as cfg
+from utils import config_utils as cfg
 
 from enum import Enum
 class CurrentState(Enum):

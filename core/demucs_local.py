@@ -1,6 +1,6 @@
 import os
 import log_utils
-from config_utils import *
+from utils.config_utils import *
 import demucs.separate
 import shlex
 

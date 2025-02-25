@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import json
-import core.config_utils as cfg
+import utils.config_utils as cfg
 
 def main():
     st.markdown(

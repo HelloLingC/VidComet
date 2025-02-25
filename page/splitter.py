@@ -1,7 +1,7 @@
 import streamlit as st
 import sys, os
 sys.path.append(os.getcwd() +'/core')
-from core import config_utils as cfg
+from utils import config_utils as cfg
 from core import log_utils
 import core.split_main
 import core.gpt_translator

@@ -2,7 +2,7 @@ import pandas as pd
 import spacy.cli
 import spacy.cli.download
 import log_utils
-from config_utils import *
+from utils.config_utils import *
 import env_check
 import spacy
 import split_comma

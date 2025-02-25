@@ -1,6 +1,6 @@
 from openai import OpenAI
 import log_utils
-import config_utils
+import utils.config_utils as config_utils
 
 DEFAULT_SYSTEM_PROMPT = "you are a helpful, knowledgeable AI assistant."
 

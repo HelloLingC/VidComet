@@ -3,7 +3,7 @@ import gpt_openai
 import gpt_prompts
 import json
 import json_repair
-from config_utils import *
+from utils.config_utils import *
 import log_utils
 
 """

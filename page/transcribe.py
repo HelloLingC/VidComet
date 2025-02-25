@@ -1,7 +1,7 @@
 import streamlit as st
 from core import log_utils
 import core
-from core import config_utils as cfg
+from utils import config_utils as cfg
 import os
 import builtins
 

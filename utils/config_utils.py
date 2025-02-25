@@ -1,6 +1,6 @@
 import ruamel.yaml
 import os
-import log_utils
+# import log_utils
 
 INPUT_VIDEO = os.path.join(os.getcwd(),'input.mp4')
 

@@ -1,4 +1,4 @@
-import config_utils as cfg
+import utils.config_utils as cfg
 import gpt_openai
 import gpt_prompts
 import os

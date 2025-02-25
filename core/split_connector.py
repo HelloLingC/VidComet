@@ -2,7 +2,7 @@ import warnings
 warnings.filterwarnings("ignore", category=FutureWarning)
 import os,sys
 from core.split_main import prepare_spacy_model
-from config_utils import *
+from utils.config_utils import *
 from rich import print
 import pandas as pd
 
