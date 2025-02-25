@@ -2,6 +2,7 @@ import streamlit as st
 import tkinter as tk
 from tkinter import filedialog
 from crawl import ytp
+from core import config_utils as cfg
 
 options_input_mode = ['本地文件', '远程文件流']
 options_download_res = ['最高画质', '1080p', '720p', '480p', '360p']
@@ -42,6 +43,7 @@ def main():
             if fname:
                 st.session_state.vid_file = fname
                 st.text_input('选择的文件：', fname)
+                cfg.INPUT_VIDEO = fname
                 video_data = open(fname, "rb").read()
                 st.video(video_data)
                 st.spinner('正在处理...')

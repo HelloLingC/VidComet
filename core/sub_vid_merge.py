@@ -36,7 +36,7 @@ def check_gpu_available():
         return False
 
 def merge_subtitles_to_video():
-    video_file = 'C:\\Users\\lingc\\Downloads\\input.mp4'
+    video_file = cfg.INPUT_VIDEO
     os.makedirs(os.path.dirname(OUTPUT_VIDEO), exist_ok=True)
 
     # Check resolution

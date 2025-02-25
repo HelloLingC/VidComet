@@ -2,6 +2,8 @@ import ruamel.yaml
 import os
 import log_utils
 
+INPUT_VIDEO = os.path.join(os.getcwd(),'input.mp4')
+
 OUTPUT_DIR = os.path.join(os.getcwd(),'output')
 AUDIO_DIR = os.path.join(OUTPUT_DIR, 'audio')
 RAW_AUDIO_FILE_PATH = os.path.join(AUDIO_DIR, 'raw.mp3')
