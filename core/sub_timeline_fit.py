@@ -94,10 +94,10 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
 
                 current_pos += sent_len
                 matched = True
-                break
-            # print("CUREENT++")
+            else:
+                # when not matched, find the next match
+                current_pos += 1
             # print("allwords: " + all_words_str[current_pos:current_pos+sent_len])
-            current_pos += 1
         if not matched:
             print(cleared_sent)
             log_utils.error('No match for sentence: ' + cleared_sent)

@@ -67,7 +67,7 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
             pending_reqs.append(sent)
             if len(pending_reqs) >= batch_size:
                 handled_batch_num += 1
-                log_utils.info(f'{handled_batch_num} Batch: Translating {len(pending_reqs)} sentences...')
+                log_utils.info(f'Batch {handled_batch_num}: Translating {len(pending_reqs)} sentences...')
                 futures.append(executor.submit(translate, pending_reqs))
                 pending_reqs = []
         if pending_reqs:

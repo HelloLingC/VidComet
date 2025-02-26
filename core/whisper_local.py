@@ -46,10 +46,10 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
         batch_size = 1
         compute_type = 'int8'
         log_utils.info(f'[CPU] Batch size: {batch_size}, [cyan]compute_type: {compute_type}[/cyan]')
+
     log_utils.info('开始进行语音识别...')
     cfg_lang = get_config_value('whisper.language')
     model_arch = get_config_value('whisper.model')
-    cfg_lang = 'auto'
     target_language = None if 'auto' in cfg_lang else cfg_lang
     vad_options = {"vad_onset": 0.500,"vad_offset": 0.363}
     asr_options = {"temperatures": [0],"initial_prompt": "",}
@@ -85,5 +85,5 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     # Since this function may process multiple segments,
     # the starting point of each segment is considered as 0s by Whisper.
     # However, in fact, the segments are processed in order.
-    
+
     return result

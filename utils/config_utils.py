@@ -33,10 +33,7 @@ OUTPUT_VIDEO = os.path.join(OUTPUT_DIR, 'output.mp4')
 
 # This function should be called in 'app.py'
 # to get the current working directory. Don't let other moduless get cwd
-def init_config_helper():
-    if not os.path.exists(CONFIG_FILE_PATH):
-        log_utils.warn('WARNING: Config file not found! Using empty config')
-    
+
 def get_config_value(keys: str, default=None):
     with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
         yaml = ruamel.yaml.YAML(typ='rt')

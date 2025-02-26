@@ -1,7 +1,7 @@
 import streamlit as st
 import tkinter as tk
 from tkinter import filedialog
-from crawl import ytp
+from utils import ytp
 from utils import config_utils as cfg
 
 options_input_mode = ['本地文件', '远程文件流']

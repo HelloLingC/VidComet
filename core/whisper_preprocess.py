@@ -71,8 +71,12 @@ def get_audio_duration(audio_file: str) -> float:
         duration = 0
     return duration
 
-# split audio into 30mins for whisper
 def split_audio(audio_file: str, frag_len:int=30*60, window: int=60) -> list[tuple[float, float]]:
+    """
+    Split audio into 30mins for whisper
+    The real split will happen when trascribe, whose output in SEGMENT_TEMP_PATH
+    Return: segments - list of tuples (start_time, end_time)
+    """
     log_utils.info('开始切分音频...')
 
     duration = get_audio_duration(audio_file)
