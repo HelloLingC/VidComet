@@ -13,13 +13,22 @@ options_model = ["large-v3"]
 """transcribe audio segememts one by one"""
 def transcribe_segments(segments):
     texts = []
-    result = []
+    result = [] # words list
     for start, end in segments:
         log_utils.info(f"正在转录片段 从 {start} 到 {end} 秒")
         res = transcribe_audio(start, end)
         for segment in res['segments']:
             # transcribed text from Whisperx always with inappropriate quotes 
             text = segment['text'].strip("\"").strip(" ")
+            if start != 0:
+                # Adjust segment timestamps
+                segment['start'] += start
+                segment['end'] += start
+                if 'words' in segment:
+                    for word in segment['words']:
+                        word['start'] += start
+                        word['end'] += start
+
             # for sententces, we don't need timeline
             # texts.append({'start': segment['start'], 'end': segment['end'], 'text': text})
             texts.append(text + '\n')
@@ -77,12 +86,13 @@ def transcribe_audio(start: float, end: float, device="cuda", compute_type='floa
     result = whisperx.align(result['segments'], model_a, metadata, segment, device, return_char_alignments=False)
     log_utils.success('对齐成功！')
 
-    gc.collect()
-    del model_a
-    torch.cuda.empty_cache()
-
     # Since this function may process multiple segments,
     # the starting point of each segment is considered as 0s by Whisper.
     # However, in fact, the segments are processed in order.
+    # Adjust timestamps by adding the segment start time
+
+    gc.collect()
+    del model_a
+    torch.cuda.empty_cache()
 
     return result
