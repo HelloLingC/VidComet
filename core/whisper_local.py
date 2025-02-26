@@ -12,8 +12,8 @@ options_model = ["large-v3"]
 
 """transcribe audio segememts one by one"""
 def transcribe_segments(segments):
-    texts = []
-    result = [] # words list
+    texts = [] # sents with no timestamps
+    result = [] # words list with exact timestamps
     for start, end in segments:
         log_utils.info(f"正在转录片段 从 {start} 到 {end} 秒")
         res = transcribe_audio(start, end)
@@ -22,8 +22,8 @@ def transcribe_segments(segments):
             text = segment['text'].strip("\"").strip(" ")
             if start != 0:
                 # Adjust segment timestamps
-                segment['start'] += start
-                segment['end'] += start
+                # segment['start'] += start
+                # segment['end'] += start
                 if 'words' in segment:
                     for word in segment['words']:
                         word['start'] += start
