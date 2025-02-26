@@ -8,6 +8,7 @@ import pandas as pd
 from string import Template
 
 def ai_summary(summary: str):
+    # Todo: Dark theme
     css = """
  <style>
         .summary_container {
@@ -17,16 +18,21 @@ def ai_summary(summary: str):
             padding: 1rem;
             max-width: 760px;
         }
+        .summary_container span {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fbdb3c;
+        }
     </style>
     """
 
     html="""
-    <div>
         <div class="summary_container">
-        <h4>由 AI 生成的摘要</h4>
+        <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fbdb3c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bot"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+        由 AI 生成的摘要
+        </span>
         <p>${summary}</p>
         </div>
-    </div>
         """
     st.markdown(css, unsafe_allow_html=True)
     st.markdown(Template(html.strip()).substitute(summary=summary), unsafe_allow_html=True)

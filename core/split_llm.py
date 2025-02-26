@@ -36,7 +36,7 @@ class SplitterLLM:
             pending_req = []
             for i, sent in enumerate(sents):
                 sent = sent.strip()
-                # 一条句子的单词数
+                # the word count of a sentence by nlp
                 word_count = len(self.nlp(sent))
                 # 如果单词数大于阈值，则进行拆分
                 if word_count > word_limit:
@@ -55,7 +55,7 @@ class SplitterLLM:
                     # Store its index, let next pending request carry it
                     unchanged_indexs.append(i)
 
-            # 处理剩余的请求
+            # Handle the remaining sentences
             if pending_req:
                 future = executor.submit(self.send_request, pending_req)
                 futures.append(future)

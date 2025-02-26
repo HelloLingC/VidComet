@@ -6,7 +6,6 @@ from utils.config_utils import *
 import subprocess
 import shlex
 # import librosa
-import sys
 import pandas as pd
 
 options_model = ["large-v3"]

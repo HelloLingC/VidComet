@@ -48,6 +48,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
     sents: 需要进行时间轴对齐的句子
     t_sents: The translation of sentences (if have).
     """
+    # later, add word one by one from df_words to all_words_str
     all_words_str = ''
     word_pos_index: dict[int, int] = {}
     # Build index for word query
@@ -95,7 +96,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
                 current_pos += sent_len
                 matched = True
             else:
-                # when not matched, find the next match
+                # when not matched, go next char
                 current_pos += 1
             # print("allwords: " + all_words_str[current_pos:current_pos+sent_len])
         if not matched:
