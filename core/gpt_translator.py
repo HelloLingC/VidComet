@@ -27,10 +27,16 @@ def pack_json_req(texts: list) -> str:
 
 def write_result(res: str) -> dict:
     # Something wrong when asking gpt
-    if(res == None):
+    if res is None:
         return
     obj = json_repair.repair_json(res, return_objects=True)
-    lines = [obj[key]['revised_translation'] + '\n' for key in obj]
+    log_utils.debug("translate result: " + str(obj))
+    try:
+        lines = [obj[key]['revised_translation'] + '\n' for key in obj]
+    except Exception as e:
+        log_utils.error("Error writing translation result: " + str(e))
+        return
+
     with open(TRANS_LLM_PATH, 'a', encoding='utf-8') as f:
         f.writelines(lines)
 
@@ -42,7 +48,12 @@ def translate(pending_reqs: list) -> str:
     chunk = pack_json_req(pending_reqs)
     conversation_history.append({'role': 'user', 'content': chunk})
     res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt(), conversation_history=conversation_history)
-    if res != None:
+    if res is not None:
+        # res is json object str. when next time asking gpt
+        # provied with conversation, it will be wrong to parse
+        # due to the double quotes in the res content
+        # res = res.replace('\"', '\\"')
+        # Sorry its not true.
         conversation_history.append({'role': 'assistant', 'content': res})
     else:
         conversation_history.pop()
@@ -64,6 +75,8 @@ def start_translate(sents: tuple=None, num_threads=3, batch_size=8):
         for i, sent in enumerate(sents):
             # 每条句子总是以\n结尾
             sent = sent.replace('\n', '')
+            if sent == '':
+                continue
             pending_reqs.append(sent)
             if len(pending_reqs) >= batch_size:
                 handled_batch_num += 1

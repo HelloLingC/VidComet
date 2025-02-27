@@ -33,8 +33,11 @@ formatter = logging.Formatter('%(asctime)s - %(message)s')
 observable_handler.setFormatter(formatter)
 logger.addHandler(observable_handler)
 
+
+IS_DEBUG = True
 def debug(v):
-    print(v)
+    if IS_DEBUG:
+        print(v)
 
 def info(v):
     logger.info(v)

@@ -20,10 +20,10 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, conversatio
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": prompt}
         ]
-    # Todo: fix conversation history
-    # print(conversation_history)
-    # if conversation_history:
-    #     messages = conversation_history.extend(messages)
+
+    if conversation_history:
+        # bro, extend is in-place func
+        conversation_history.extend(messages)
 
     client = OpenAI(api_key=api_key, base_url=api_url, max_retries=3)
     try:
