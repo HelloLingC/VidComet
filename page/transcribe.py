@@ -45,7 +45,7 @@ def main():
         st.error('视频文件路径不能为空！')
 
     with st.container(border=True):
-        st.subheader('人声分离')
+        st.subheader('视频预处理')
         st.selectbox('模型', ['htdemucs', 'htdemucs-ft', 'htdemucs_6s', 'mdx_extra_q'])
         st_progress = st.empty()
         st_asr_result = st.container()

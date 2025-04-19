@@ -63,6 +63,12 @@ Example:
     """
     return Template(prompt.strip()).substitute(tgt_lang=tgt_lang)
 
+def get_simple_translation_prompt():
+    prompt = """
+Translate the following text into Chinese
+Translate each line of subtitles individually, without arbitrary line breaks."""
+    return prompt.strip()
+
 def get_translation_prompt():
     TARGET_LANGUAGE = get_config_value("translator.target")
     src_language = get_config_value("whisper.detected_language")

@@ -32,6 +32,8 @@ def ask_gpt(prompt: str, system_prompt: str = DEFAULT_SYSTEM_PROMPT, conversatio
             messages=messages
         )
         resp = response.choices[0].message.content
+        # ollama deepseek
+        # resp = resp.split('</think>')[-1]
     except Exception as e:
         print(f"Error while asking GPT: {e}")
         #log_utils.error(f"Error while asking GPT: {e}")

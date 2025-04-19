@@ -48,7 +48,6 @@ def get_config_value(keys: str, default=None):
             raise KeyError(f'{key} not found in config file!')
     return configs
 
-# Todo: create a new column
 def set_config_value(key_str: str, value: str):
     with open(CONFIG_FILE_PATH, 'r', encoding='utf-8') as f:
         yaml = ruamel.yaml.YAML(typ='rt')

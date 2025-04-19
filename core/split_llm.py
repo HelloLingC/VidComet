@@ -16,7 +16,7 @@ class SplitterLLM:
         # LLM request failed
         if resp == None:
             print('Something wrong when asking gpt')
-            resp == req
+            resp == req         
         print('Catch Splitter LLM Response for a batch!')
         resp = resp.replace('<br>', '\n')
         resp = resp.replace('.', '\n')

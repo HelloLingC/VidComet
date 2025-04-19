@@ -29,13 +29,15 @@ def write_result(res: str) -> dict:
     # Something wrong when asking gpt
     if res is None:
         return
-    obj = json_repair.repair_json(res, return_objects=True)
-    log_utils.debug("translate result: " + str(obj))
-    try:
-        lines = [obj[key]['revised_translation'] + '\n' for key in obj]
-    except Exception as e:
-        log_utils.error("Error writing translation result: " + str(e))
-        return
+    lines = res
+    # simple translation
+    # obj = json_repair.repair_json(res, return_objects=True)
+    # log_utils.debug("translate result: " + str(obj))
+    # try:
+    #     lines = [obj[key]['revised_translation'] + '\n' for key in obj]
+    # except Exception as e:
+    #     log_utils.error("Error writing translation result: " + str(e))
+    #     return
 
     with open(TRANS_LLM_PATH, 'a', encoding='utf-8') as f:
         f.writelines(lines)
@@ -45,9 +47,11 @@ def translate(pending_reqs: list) -> str:
     if len(conversation_history) > 2:
         conversation_history = conversation_history[-2:]
 
-    chunk = pack_json_req(pending_reqs)
+    # chunk = pack_json_req(pending_reqs)
+    chunk = '\n'.join(pending_reqs)
     conversation_history.append({'role': 'user', 'content': chunk})
-    res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt(), conversation_history=conversation_history)
+    # res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_translation_prompt(), conversation_history=conversation_history)
+    res = gpt_openai.ask_gpt(chunk, system_prompt=gpt_prompts.get_simple_translation_prompt(), conversation_history=conversation_history)
     if res is not None:
         # res is json object str. when next time asking gpt
         # provied with conversation, it will be wrong to parse

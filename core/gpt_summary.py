@@ -30,10 +30,8 @@ def chunk_text(text: str, max_tokens: int = 3000) -> List[str]:
 def start_summary():
     with open(cfg.TRANSCRIPTION_SENT_PATH, 'r', encoding='utf-8') as f:
         text = f.read()
-        
         # Split into manageable chunks
         chunks = chunk_text(text)
-        
         # Get summary for each chunk
         chunk_summaries = []
         for chunk in chunks:

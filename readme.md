@@ -1,5 +1,7 @@
 # VidComet
 
+![screenshot](/screenshots/2025-02-16-173003.png)
+
 ## 简介
 
 

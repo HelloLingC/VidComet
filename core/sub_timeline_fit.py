@@ -59,6 +59,7 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         word_pos_index[len(all_words_str)] = i
         all_words_str += word
 
+
     timestamp_list = []
     current_pos = 0
     for i, sent in enumerate(sents):
@@ -70,7 +71,6 @@ def combine_sent_timestamp(df_words: pd.DataFrame, sents: list[str], t_sents: li
         # And gpt_translator wont fix that
         if cleared_sent == '':
             continue
-
         # NOTICE: words table from whisper contain punct
         # But after LLM translation, it may disappear (like ',')
         # so the 'current_pos++' in this iteration end
