@@ -28,6 +28,7 @@ OUTPUT_VIDEO = os.path.join(cfg.OUTPUT_DIR, "output.mp4")
 SRC_SRT = cfg.SRT_PATH
 TRANS_SRT = cfg.SRT_TRANS_PATH
 
+# Check if GPU suppports h264_nvenc encoder
 def check_gpu_available():
     try:
         result = subprocess.run(['ffmpeg', '-encoders'], capture_output=True, text=True)

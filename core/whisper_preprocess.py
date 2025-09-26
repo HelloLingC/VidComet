@@ -1,6 +1,6 @@
 import subprocess
 from utils.config_utils import *
-import log_utils
+from . import log_utils
 import os
 
 # Convert video into audio for whisper

@@ -1,7 +1,7 @@
 import whisperx
 import torch
 import gc
-import log_utils
+from . import log_utils
 from utils.config_utils import *
 import subprocess
 import shlex

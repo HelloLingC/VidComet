@@ -12,6 +12,21 @@ class CurrentState(Enum):
     TRANSLATING = 4
     SUBTITLE_MERGING = 5
 
+def start_preprocess(file_path: str) -> str:
+    # Check if file path is video or audio
+    audio_exts = {'.mp3', '.wav', '.flac', '.aac', '.ogg', '.m4a', '.wma'}
+    video_exts = {'.mp4', '.mkv', '.avi', '.mov', '.wmv', '.flv', '.webm'}
+    
+    file_ext = file_path.lower().split('.')[-1]
+    if f'.{file_ext}' in video_exts:
+        # Video
+        preprocess.convert_to_audio(vid_path)
+    elif f'.{file_ext}' in audio_exts:
+        cfg.VOCAL_AUDIO_FILE_PATH = file_path
+    else:
+        raise ValueError(f"Unsupported file extension: {file_ext}")
+    demucs_local.start_demucs()
+
 def start_vocal_seperation(vid_path: str):
     """音频轨道分离 and vocal seperation"""
     preprocess.convert_to_audio(vid_path)

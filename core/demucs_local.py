@@ -1,5 +1,5 @@
 import os
-import log_utils
+from . import log_utils
 from utils.config_utils import *
 import demucs.separate
 import shlex
