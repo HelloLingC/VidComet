@@ -1,0 +1,34 @@
+gpt:
+  api_url: https://api.deepseek.com
+  api_key: sk-xxxxxxx
+  model: deepseek-chat
+  # api_url: http://localhost:11434/v1
+  # api_key: ollama
+  # model: qwen2.5-coder:7b
+
+whisper:
+  language: auto
+  detected_language: en # this value is auto generating
+  model: large-v2
+  mode: local
+
+translator:
+  target: Chinese # Translate subtitles into...
+
+# DO NOT MODIFY THE FOLLOWING OPTIONS
+
+language_space_joiner: [en, es, fr, de, it, ru]
+language_no_space_joiner: [zh, ja, ko]
+
+spacy:
+  model_map:
+    en: en_core_web_md
+    zh: zh_core_web_md
+    ja: ja_core_web_md
+    ko: ko_core_web_md
+    fr: fr_core_web_md
+    de: de_core_web_md
+    es: es_core_web_md
+    it: it_core_web_md
+    pt: pt_core_web_md
+    ru: ru_core_web_md
